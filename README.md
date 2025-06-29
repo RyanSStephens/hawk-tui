@@ -8,11 +8,11 @@
 
 ![Hawk TUI Demo](docs/demo.gif)
 
-## ✨ What is Hawk TUI?
+## What is Hawk TUI?
 
 Hawk TUI is a **universal TUI framework** that can transform any application in any programming language into a rich, interactive terminal interface. Whether you're monitoring a web server, running database migrations, or training ML models, Hawk TUI provides instant visualization with **zero architectural changes** to your existing code.
 
-## 🚀 Quick Start (< 5 minutes)
+## Quick Start (< 5 minutes)
 
 ### 1. Install Hawk TUI
 ```bash
@@ -43,7 +43,7 @@ python your_app.py | hawk
 
 **That's it!** Your application now has a beautiful TUI interface.
 
-## 🎯 Core Philosophy
+## Core Philosophy
 
 ### Drop-in Integration
 - **One line of code** to get started
@@ -74,7 +74,7 @@ use hawk::auto;
 - **Scale & Performance**: Multi-instance support, resource limits
 - **Remote Monitoring**: Secure tunneling for production environments
 
-## 🏗️ Architecture
+## Architecture
 
 ```
 ┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
@@ -91,27 +91,27 @@ use hawk::auto;
 - **Zero Dependencies**: Host applications don't install TUI libraries
 - **Extensible**: Plugin system for custom widgets and integrations
 
-## 🛠️ Features
+## Features
 
 ### Real-time Monitoring
-- **📊 Live Metrics**: Counters, gauges, histograms with auto-scaling charts
-- **📝 Intelligent Logging**: Filtering, search, context-aware display
-- **📈 Interactive Dashboards**: Customizable widgets and layouts
-- **⚙️ Configuration Management**: Live parameter editing with validation
+- **Live Metrics**: Counters, gauges, histograms with auto-scaling charts
+- **Intelligent Logging**: Filtering, search, context-aware display
+- **Interactive Dashboards**: Customizable widgets and layouts
+- **Configuration Management**: Live parameter editing with validation
 
 ### Developer Experience
-- **⌨️ Vim-like Navigation**: Intuitive keyboard shortcuts
-- **🎨 Beautiful Themes**: Professional dark/light themes
-- **🔍 Smart Search**: Filter logs, metrics, and configuration
-- **📱 Responsive Design**: Adapts to any terminal size
+- **Vim-like Navigation**: Intuitive keyboard shortcuts
+- **Beautiful Themes**: Professional dark/light themes
+- **Smart Search**: Filter logs, metrics, and configuration
+- **Responsive Design**: Adapts to any terminal size
 
 ### Production Ready
-- **🔒 Security**: Input validation, resource limits, audit logging
-- **⚡ Performance**: Memory efficient, graceful degradation
-- **🔧 Monitoring**: Built-in performance metrics and health checks
-- **🌐 Remote Access**: Secure tunneling for production monitoring
+- **Security**: Input validation, resource limits, audit logging
+- **Performance**: Memory efficient, graceful degradation
+- **Monitoring**: Built-in performance metrics and health checks
+- **Remote Access**: Secure tunneling for production monitoring
 
-## 📖 Examples
+## Examples
 
 ### Web Server Monitoring
 ```python
@@ -149,7 +149,7 @@ def migrate_table(table_name, total_records):
         if i % 100 == 0:
             hawk.log(f"Migrated {i+1}/{total_records} records")
     
-    hawk.log(f"✅ Completed {table_name}", level="SUCCESS")
+    hawk.log(f"Completed {table_name}", level="SUCCESS")
 ```
 
 ### Machine Learning Training
@@ -170,43 +170,43 @@ for epoch in range(100):
             hawk.log(f"Epoch {epoch}, Batch {batch_idx}: Loss = {loss:.4f}")
 ```
 
-## 🚀 Use Cases
+## Use Cases
 
-### 🌐 Web Development
+### Web Development
 - API endpoint monitoring and performance tracking
 - Database query analysis and optimization
 - Request/response logging with filtering
 - Configuration hot-reloading and validation
 
-### ⚙️ DevOps & Infrastructure  
+### DevOps & Infrastructure  
 - Container orchestration dashboards
 - Log aggregation and real-time analysis
 - Metrics collection and alerting interfaces
 - CI/CD pipeline visualization and control
 
-### 📊 Data Processing
+### Data Processing
 - ETL pipeline monitoring and control
 - Data quality dashboards and validation
 - Processing job status and progress tracking
 - Performance profiling and optimization
 
-### 🎮 Game Development
+### Game Development
 - Asset loading progress and performance
 - Debug console with live parameter tweaking
 - Performance metrics and frame rate analysis
 - Live configuration and gameplay tuning
 
-## 📚 Language Support
+## Language Support
 
 | Language | Status | Installation | Example |
 |----------|--------|--------------|---------|
-| **Python** | ✅ Ready | `pip install hawk-tui` | [Flask Demo](examples/python/flask_demo.py) |
-| **Node.js** | 🚧 In Progress | `npm install hawk-tui` | [Express Demo](examples/nodejs/express_demo.js) |
-| **Go** | 🚧 In Progress | `go get hawk-tui/client` | [Gin Demo](examples/go/gin_demo.go) |
-| **Rust** | 📋 Planned | `cargo add hawk-tui` | Coming Soon |
-| **Java** | 📋 Planned | Maven/Gradle | Coming Soon |
+| **Python** | Ready | `pip install hawk-tui` | [Flask Demo](examples/python/flask_demo.py) |
+| **Node.js** | In Progress | `npm install hawk-tui` | [Express Demo](examples/nodejs/express_demo.js) |
+| **Go** | In Progress | `go get hawk-tui/client` | [Gin Demo](examples/go/gin_demo.go) |
+| **Rust** | Planned | `cargo add hawk-tui` | Coming Soon |
+| **Java** | Planned | Maven/Gradle | Coming Soon |
 
-## 🏃 Getting Started
+## Getting Started
 
 ### Installation Options
 
@@ -274,7 +274,7 @@ python your_app.py | hawk --theme dark --refresh-rate 500ms
 python your_app.py | hawk --remote --port 9090
 ```
 
-## 🎛️ Advanced Features
+## Advanced Features
 
 ### Dashboard Creation
 ```python
@@ -315,7 +315,7 @@ with hawk.context("Database Migration"):
         migrate_users_table()
 ```
 
-## 🔧 Configuration
+## Configuration
 
 ### Environment Variables
 ```bash
@@ -345,7 +345,7 @@ security:
   max_message_rate: 1000
 ```
 
-## 🤝 Contributing
+## Contributing
 
 We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
 
@@ -363,15 +363,15 @@ go test ./...
 cd examples/python && python -m pytest test_hawk.py
 ```
 
-## 📄 License
+## License
 
 MIT License - see [LICENSE](LICENSE) file for details.
 
-## 🌟 Star History
+## Star History
 
 [![Star History Chart](https://api.star-history.com/svg?repos=hawk-tui/hawk&type=Date)](https://star-history.com/#hawk-tui/hawk&Date)
 
-## 🔗 Links
+## Links
 
 - **Website**: https://hawk-tui.dev
 - **Documentation**: https://docs.hawk-tui.dev  
@@ -381,6 +381,6 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ---
 
-**Made with ❤️ by developers, for developers.**
+**Made with care by developers, for developers.**
 
 *Transform your CLI tools into beautiful, interactive experiences.*
