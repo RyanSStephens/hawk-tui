@@ -1,35 +1,38 @@
-Hawk TUI License
+GNU AFFERO GENERAL PUBLIC LICENSE
+Version 3, 19 November 2007
 
-Copyright (c) 2024 Hawk TUI
+Copyright (C) 2024 Ryan Stephens <ryan@hawktui.dev>
 
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to use,
-copy, modify, and distribute the Software for personal, non-commercial purposes
-only, subject to the following conditions:
+This program is free software: you can redistribute it and/or modify
+it under the terms of the GNU Affero General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
 
-1. The above copyright notice and this permission notice shall be included in all
-   copies or substantial portions of the Software.
+This program is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU Affero General Public License for more details.
 
-2. Commercial use of the Software is strictly prohibited without explicit written
-   permission from the copyright holder. Commercial use includes, but is not
-   limited to:
-   - Using the Software in any commercial product or service
-   - Selling the Software or any derivative works
-   - Using the Software to provide commercial services
-   - Incorporating the Software into proprietary applications
+You should have received a copy of the GNU Affero General Public License
+along with this program.  If not, see <https://www.gnu.org/licenses/>.
 
-3. Modifications and derivative works are permitted for personal use only and
-   must not be used for commercial purposes.
+COMMERCIAL LICENSING
 
-4. Redistribution of the Software or derivative works must include this license
-   and must not imply any endorsement by the original author.
+If you wish to use Hawk TUI in a commercial product or service without 
+complying with the AGPL-3.0 license terms, you must obtain a commercial 
+license. Commercial licenses are available for organizations that want to:
 
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
+- Use Hawk TUI in proprietary software
+- Distribute Hawk TUI without source code disclosure
+- Offer Hawk TUI as part of a commercial service
+- Avoid the copyleft requirements of AGPL-3.0
 
-For commercial licensing inquiries, please contact: license@hawktui.dev
+For commercial licensing inquiries, contact: license@hawktui.dev
+
+DUAL LICENSING SUMMARY
+
+This software is dual-licensed:
+1. AGPL-3.0 for open source / personal use
+2. Commercial license for commercial use
+
+Choose the license that best fits your use case.
