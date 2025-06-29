@@ -3,7 +3,7 @@
 **Transform any command-line application into a beautiful, interactive TUI in minutes.**
 
 [![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go)](https://golang.org)
-[![License](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License](https://img.shields.io/badge/License-Custom-orange.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
 ![Hawk TUI Demo](docs/demo.gif)
@@ -365,7 +365,9 @@ cd examples/python && python -m pytest test_hawk.py
 
 ## License
 
-MIT License - see [LICENSE](LICENSE) file for details.
+Hawk TUI is free for personal use. Commercial use requires a license. See [LICENSE](LICENSE) file for details.
+
+For commercial licensing inquiries, please contact: license@hawktui.dev
 
 ## Star History
 
@@ -373,8 +375,8 @@ MIT License - see [LICENSE](LICENSE) file for details.
 
 ## Links
 
-- **Website**: https://hawk-tui.dev
-- **Documentation**: https://docs.hawk-tui.dev  
+- **Website**: https://hawktui.dev ([source](https://github.com/RyanSStephens/hawk-tui-site))
+- **Documentation**: https://hawktui.dev/docs  
 - **Examples**: [examples/](examples/)
 - **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
 - **Roadmap**: [ROADMAP.md](ROADMAP.md)

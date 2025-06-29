@@ -1,16 +1,28 @@
-MIT License
+Hawk TUI License
 
-Copyright (c) 2025 Ryan Stephens
+Copyright (c) 2024 Hawk TUI
 
 Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
+of this software and associated documentation files (the "Software"), to use,
+copy, modify, and distribute the Software for personal, non-commercial purposes
+only, subject to the following conditions:
 
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
+1. The above copyright notice and this permission notice shall be included in all
+   copies or substantial portions of the Software.
+
+2. Commercial use of the Software is strictly prohibited without explicit written
+   permission from the copyright holder. Commercial use includes, but is not
+   limited to:
+   - Using the Software in any commercial product or service
+   - Selling the Software or any derivative works
+   - Using the Software to provide commercial services
+   - Incorporating the Software into proprietary applications
+
+3. Modifications and derivative works are permitted for personal use only and
+   must not be used for commercial purposes.
+
+4. Redistribution of the Software or derivative works must include this license
+   and must not imply any endorsement by the original author.
 
 THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
 IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
@@ -19,3 +31,5 @@ AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
 LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
+
+For commercial licensing inquiries, please contact: license@hawktui.dev
