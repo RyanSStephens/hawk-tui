@@ -1,0 +1,77 @@
+# Hawk TUI Python Client - Requirements
+#
+# This file specifies the dependencies for the Hawk TUI Python client library.
+# The library is designed to have minimal dependencies to reduce friction.
+
+# Core dependencies (none required - the library is standalone)
+# The hawk.py module has zero external dependencies by design
+
+# Optional dependencies for examples and advanced features
+# Install with: pip install -r requirements.txt
+
+# For Flask demo and web integration
+flask>=1.0.0
+
+# For advanced HTTP features (optional)
+requests>=2.20.0
+
+# Development dependencies (optional)
+# Uncomment these for development work:
+
+# Testing
+# pytest>=6.0.0
+# pytest-cov>=2.10.0
+# pytest-asyncio>=0.14.0
+
+# Code quality
+# black>=21.0.0
+# flake8>=3.8.0
+# mypy>=0.800
+# isort>=5.0.0
+
+# Git hooks
+# pre-commit>=2.10.0
+
+# Documentation
+# sphinx>=3.0.0
+# sphinx-rtd-theme>=0.5.0
+
+# Performance profiling (optional)
+# psutil>=5.7.0
+# memory-profiler>=0.57.0
+
+# Security and encryption (for enterprise features)
+# cryptography>=3.0.0
+# pyjwt>=2.0.0
+
+# Database drivers (for examples)
+# sqlite3 is included in Python standard library
+# For other databases, add as needed:
+# psycopg2-binary>=2.8.0  # PostgreSQL
+# pymongo>=3.10.0         # MongoDB
+# redis>=3.5.0            # Redis
+
+# Serialization formats (optional)
+# msgpack>=1.0.0
+# pyyaml>=5.3.0
+
+# Note: The core hawk.py library works without ANY of these dependencies.
+# They are only needed for:
+# - Running the Flask demo (flask)
+# - Development and testing (pytest, black, etc.)
+# - Advanced features (cryptography, etc.)
+# - Specific integrations (database drivers, etc.)
+
+# Installation options:
+#
+# 1. Minimal install (no dependencies):
+#    Just copy hawk.py to your project
+#
+# 2. Basic install with Flask demo:
+#    pip install flask
+#
+# 3. Full development setup:
+#    pip install -r requirements.txt
+#
+# 4. Production use:
+#    The library has no required dependencies in production
