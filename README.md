@@ -16,24 +16,37 @@ Hawk TUI is a **universal TUI framework** that can transform any application in 
 
 ### 1. Install Hawk TUI
 ```bash
-# macOS/Linux
-curl -sSL https://hawk-tui.dev/install.sh | sh
+# macOS/Linux - Easy one-liner
+curl -sSL https://raw.githubusercontent.com/hawk-tui/hawk-tui/main/scripts/install.sh | bash
+
+# Windows - PowerShell
+iwr -useb https://raw.githubusercontent.com/hawk-tui/hawk-tui/main/scripts/install.ps1 | iex
 
 # Or build from source
-git clone https://github.com/hawk-tui/hawk.git
-cd hawk
-go build ./cmd/hawk
+git clone https://github.com/hawk-tui/hawk-tui.git
+cd hawk-tui
+make build
 ```
 
-### 2. Add to Your Python App
+### 2. Add to Your Application
 ```python
+# Python - Zero configuration
 import hawk
 hawk.auto()  # One line - that's it!
 
 # Your existing code works unchanged
 print("Server starting...")  # Appears in TUI
 logger.info("Database connected")  # Automatically captured
-metrics.counter("requests").inc()  # Automatically graphed
+```
+
+```javascript
+// Node.js - Equally simple
+const hawk = require('hawk-tui');
+hawk.auto();
+
+// All your console.log and logging works as normal
+console.log('Server starting...');
+logger.info('Database connected');
 ```
 
 ### 3. Run with TUI
@@ -58,7 +71,7 @@ import hawk; hawk.auto()
 ```
 ```javascript
 // Node.js  
-require('hawk').auto();
+require('hawk-tui').auto();
 ```
 ```go
 // Go
@@ -200,11 +213,11 @@ for epoch in range(100):
 
 | Language | Status | Installation | Example |
 |----------|--------|--------------|---------|
-| **Python** | Ready | `pip install hawk-tui` | [Flask Demo](examples/python/flask_demo.py) |
-| **Node.js** | In Progress | `npm install hawk-tui` | [Express Demo](examples/nodejs/express_demo.js) |
-| **Go** | In Progress | `go get hawk-tui/client` | [Gin Demo](examples/go/gin_demo.go) |
-| **Rust** | Planned | `cargo add hawk-tui` | Coming Soon |
-| **Java** | Planned | Maven/Gradle | Coming Soon |
+| **Python** | ✅ Ready | `pip install hawk-tui` | [Demo](examples/python/demo.py) |
+| **Node.js** | ✅ Ready | `npm install hawk-tui` | [Demo](examples/nodejs/demo.js) |
+| **Go** | 🚧 In Progress | `go get hawk-tui/client` | [Demo](examples/go/demo.go) |
+| **Rust** | 📋 Planned | `cargo add hawk-tui` | Coming Soon |
+| **Java** | 📋 Planned | Maven/Gradle | Coming Soon |
 
 ## Getting Started
 
@@ -212,22 +225,42 @@ for epoch in range(100):
 
 #### Option 1: Install Script (Recommended)
 ```bash
-curl -sSL https://hawk-tui.dev/install.sh | sh
+# Linux/macOS
+curl -sSL https://raw.githubusercontent.com/hawk-tui/hawk-tui/main/scripts/install.sh | bash
+
+# Windows (PowerShell)
+iwr -useb https://raw.githubusercontent.com/hawk-tui/hawk-tui/main/scripts/install.ps1 | iex
 ```
 
-#### Option 2: Download Binary
+#### Option 2: Package Managers
 ```bash
-# Download latest release
-wget https://github.com/hawk-tui/hawk/releases/latest/download/hawk-linux-amd64
-chmod +x hawk-linux-amd64
-sudo mv hawk-linux-amd64 /usr/local/bin/hawk
+# Homebrew (macOS/Linux)
+brew install hawk-tui/tap/hawk-tui
+
+# Docker
+docker run -it --rm hawktui/hawk-tui:latest
+
+# NPM (Global)
+npm install -g hawk-tui
+
+# Python (PyPI)
+pip install hawk-tui
 ```
 
-#### Option 3: Build from Source
+#### Option 3: Download Binary
 ```bash
-git clone https://github.com/hawk-tui/hawk.git
-cd hawk
-go build ./cmd/hawk
+# Download latest release for your platform
+wget https://github.com/hawk-tui/hawk-tui/releases/latest/download/hawk-tui-linux-amd64.tar.gz
+tar -xzf hawk-tui-linux-amd64.tar.gz
+sudo mv hawk /usr/local/bin/
+```
+
+#### Option 4: Build from Source
+```bash
+git clone https://github.com/hawk-tui/hawk-tui.git
+cd hawk-tui
+make build
+sudo make install
 ```
 
 ### Basic Usage
@@ -351,16 +384,25 @@ We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) f
 
 ### Development Setup
 ```bash
-git clone https://github.com/hawk-tui/hawk.git
-cd hawk
-go mod download
-go run cmd/hawk/main.go
+git clone https://github.com/hawk-tui/hawk-tui.git
+cd hawk-tui
+make dev  # Sets up development environment
+make build  # Build the binary
 ```
 
 ### Running Tests
 ```bash
-go test ./...
-cd examples/python && python -m pytest test_hawk.py
+make test  # Run all tests (Go, Node.js, Python)
+make test-go  # Go tests only
+make test-nodejs  # Node.js client tests
+make test-python  # Python client tests
+```
+
+### Build and Package
+```bash
+make build-all  # Build for all platforms
+make package  # Create distribution packages
+make release  # Full release pipeline
 ```
 
 ## License
@@ -374,15 +416,15 @@ See [LICENSE](LICENSE) file for details. For commercial licensing inquiries, con
 
 ## Star History
 
-[![Star History Chart](https://api.star-history.com/svg?repos=hawk-tui/hawk&type=Date)](https://star-history.com/#hawk-tui/hawk&Date)
+[![Star History Chart](https://api.star-history.com/svg?repos=hawk-tui/hawk-tui&type=Date)](https://star-history.com/#hawk-tui/hawk-tui&Date)
 
 ## Links
 
-- **Website**: https://hawktui.dev ([source](https://github.com/RyanSStephens/hawk-tui-site))
-- **Documentation**: https://hawktui.dev/docs  
+- **GitHub**: https://github.com/hawk-tui/hawk-tui
+- **Documentation**: https://github.com/hawk-tui/hawk-tui/blob/main/docs/
 - **Examples**: [examples/](examples/)
 - **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
-- **Roadmap**: [ROADMAP.md](ROADMAP.md)
+- **Issues**: https://github.com/hawk-tui/hawk-tui/issues
 
 ---
 

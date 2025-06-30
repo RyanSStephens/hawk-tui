@@ -1,0 +1,49 @@
+{
+  "name": "hawk-tui-client",
+  "version": "1.0.0",
+  "description": "Hawk TUI Node.js client library for universal TUI integration",
+  "main": "hawk.js",
+  "types": "hawk.d.ts",
+  "keywords": [
+    "tui",
+    "terminal",
+    "cli",
+    "monitoring",
+    "logging",
+    "metrics",
+    "dashboard",
+    "hawk-tui"
+  ],
+  "author": "Ryan Stephens <ryan@hawktui.dev>",
+  "license": "AGPL-3.0",
+  "homepage": "https://hawktui.dev",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/hawk-tui/hawk.git",
+    "directory": "examples/nodejs"
+  },
+  "bugs": {
+    "url": "https://github.com/hawk-tui/hawk/issues"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  },
+  "scripts": {
+    "test": "node test.js",
+    "demo": "node demo.js",
+    "lint": "eslint *.js",
+    "type-check": "tsc --noEmit"
+  },
+  "files": [
+    "hawk.js",
+    "hawk.d.ts",
+    "README.md",
+    "LICENSE"
+  ],
+  "dependencies": {},
+  "devDependencies": {
+    "@types/node": "^20.0.0",
+    "eslint": "^8.0.0",
+    "typescript": "^5.0.0"
+  }
+}
