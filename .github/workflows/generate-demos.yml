@@ -1,0 +1,89 @@
+name: Generate VHS Demos
+
+on:
+  push:
+    branches: [ main ]
+    paths:
+      - 'demos/*.tape'
+      - 'examples/hawktui/*.go'
+      - '.github/workflows/generate-demos.yml'
+  pull_request:
+    branches: [ main ]
+    paths:
+      - 'demos/*.tape'
+      - 'examples/hawktui/*.go'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  generate-demos:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.21'
+          check-latest: true
+          cache: true
+
+      - name: Install VHS and dependencies
+        run: |
+          # Install VHS
+          go install github.com/charmbracelet/vhs@latest
+
+          # Install ttyd
+          wget -q https://github.com/tsl0922/ttyd/releases/download/1.7.7/ttyd.x86_64 -O /tmp/ttyd
+          sudo mv /tmp/ttyd /usr/local/bin/ttyd
+          sudo chmod +x /usr/local/bin/ttyd
+
+          # Install ffmpeg
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+        env:
+          DEBIAN_FRONTEND: noninteractive
+
+      - name: Build examples
+        run: |
+          go build -o /tmp/simple_demo examples/hawktui/simple_demo.go
+          go build -o /tmp/dashboard_demo examples/hawktui/dashboard_demo.go
+          go build -o /tmp/form_demo examples/hawktui/form_demo.go
+          go build -o /tmp/list_demo examples/hawktui/list_demo.go
+
+      - name: Generate demo GIFs
+        run: |
+          export PATH=$PATH:$(go env GOPATH)/bin
+          cd demos
+
+          echo "Generating simple_demo.gif..."
+          vhs simple_demo.tape || echo "simple_demo failed"
+
+          echo "Generating dashboard_demo.gif..."
+          vhs dashboard_demo.tape || echo "dashboard_demo failed"
+
+          echo "Generating form_demo.gif..."
+          vhs form_demo.tape || echo "form_demo failed"
+
+          echo "Generating list_demo.gif..."
+          vhs list_demo.tape || echo "list_demo failed"
+
+          ls -lh *.gif || echo "No GIFs generated"
+
+      - name: Commit demo GIFs
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+
+          if [ -n "$(git status --porcelain demos/*.gif 2>/dev/null)" ]; then
+            git add demos/*.gif
+            git commit -m "chore: update VHS demo GIFs [skip ci]"
+            git push
+          else
+            echo "No changes to commit"
+          fi
