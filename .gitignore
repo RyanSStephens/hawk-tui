@@ -101,4 +101,4 @@ yarn.lock
 # Temporary files
 *.tmp
 *.temp
-.hawk-*
+.hawk-*bin/
