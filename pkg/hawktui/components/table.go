@@ -20,7 +20,6 @@ type Table struct {
 	onSelect    func(int)
 	highlighted map[int]bool
 	sortable    bool
-	sortColumn  int
 	sortAsc     bool
 }
 

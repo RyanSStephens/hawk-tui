@@ -32,7 +32,6 @@ type LogViewer struct {
 	levelFilter  string
 	showContext  bool
 	autoScroll   bool
-	selectedLog  int
 	
 	// Display options
 	maxLogs      int
@@ -512,7 +511,7 @@ func (lv *LogViewer) renderLogEntry(log types.LogParams) string {
 	}
 	
 	// Add tags if available
-	if log.Tags != nil && len(log.Tags) > 0 {
+	if len(log.Tags) > 0 {
 		tagStyle := lipgloss.NewStyle().
 			Foreground(lipgloss.Color("#74C0FC")).
 			Background(lipgloss.Color("#1A1B26")).

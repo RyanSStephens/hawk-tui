@@ -66,6 +66,18 @@ type HandlerMetrics struct {
 	mu                  sync.RWMutex
 }
 
+// MetricsSnapshot is a snapshot of metrics without the mutex for safe copying
+type MetricsSnapshot struct {
+	MessagesReceived    int64
+	MessagesProcessed   int64
+	MessagesFailed      int64
+	BatchesReceived     int64
+	AverageProcessTime  time.Duration
+	LastMessageTime     time.Time
+	ErrorCount          map[string]int64
+	MessageTypeCount    map[string]int64
+}
+
 // DefaultConfig returns a sensible default configuration
 func DefaultConfig() HandlerConfig {
 	return HandlerConfig{
@@ -131,24 +143,31 @@ func (h *ProtocolHandler) Stop() {
 	close(h.stopCh)
 }
 
-// GetMetrics returns a copy of the current metrics
-func (h *ProtocolHandler) GetMetrics() HandlerMetrics {
+// GetMetrics returns a snapshot of the current metrics
+func (h *ProtocolHandler) GetMetrics() MetricsSnapshot {
 	h.metrics.mu.RLock()
 	defer h.metrics.mu.RUnlock()
 
-	// Create a deep copy
-	metrics := h.metrics
-	metrics.ErrorCount = make(map[string]int64)
-	metrics.MessageTypeCount = make(map[string]int64)
+	// Create a deep copy as a snapshot (no mutex)
+	snapshot := MetricsSnapshot{
+		MessagesReceived:   h.metrics.MessagesReceived,
+		MessagesProcessed:  h.metrics.MessagesProcessed,
+		MessagesFailed:     h.metrics.MessagesFailed,
+		BatchesReceived:    h.metrics.BatchesReceived,
+		AverageProcessTime: h.metrics.AverageProcessTime,
+		LastMessageTime:    h.metrics.LastMessageTime,
+		ErrorCount:         make(map[string]int64),
+		MessageTypeCount:   make(map[string]int64),
+	}
 
 	for k, v := range h.metrics.ErrorCount {
-		metrics.ErrorCount[k] = v
+		snapshot.ErrorCount[k] = v
 	}
 	for k, v := range h.metrics.MessageTypeCount {
-		metrics.MessageTypeCount[k] = v
+		snapshot.MessageTypeCount[k] = v
 	}
 
-	return metrics
+	return snapshot
 }
 
 // processMessages is the main message processing loop

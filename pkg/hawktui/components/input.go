@@ -14,7 +14,6 @@ type Input struct {
 	cursorPos   int
 	maxLength   int
 	masked      bool
-	multiline   bool
 	onChange    func(string)
 	validator   func(string) bool
 	errorMsg    string

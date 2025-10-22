@@ -302,7 +302,7 @@ func TestConcurrentAccess(t *testing.T) {
 				Timestamp: &now,
 				Component: "test-app",
 			}
-			model.HandleLog(logParams, nil)
+			_ = model.HandleLog(logParams, nil)
 		}
 		done <- true
 	}()
@@ -317,7 +317,7 @@ func TestConcurrentAccess(t *testing.T) {
 				Type:      types.MetricTypeGauge,
 				Timestamp: &now,
 			}
-			model.HandleMetric(metricParams, nil)
+			_ = model.HandleMetric(metricParams, nil)
 		}
 		done <- true
 	}()
@@ -394,7 +394,7 @@ func TestStatusUpdate(t *testing.T) {
 		Component: "test-app",
 	}
 	
-	model.HandleLog(logParams, nil)
+	_ = model.HandleLog(logParams, nil)
 	
 	// Note: messageCount is updated in handleDataUpdate, not in Handle* methods
 	// So we can't test it directly here without triggering the full message flow

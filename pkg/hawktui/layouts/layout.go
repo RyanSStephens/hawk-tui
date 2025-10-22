@@ -253,19 +253,25 @@ func (f *Flexbox) Render() string {
 
 	var result string
 	if f.direction == DirectionHorizontal {
-		pos := lipgloss.Top
-		if f.align == AlignCenter {
+		var pos lipgloss.Position
+		switch f.align {
+		case AlignCenter:
 			pos = lipgloss.Center
-		} else if f.align == AlignEnd {
+		case AlignEnd:
 			pos = lipgloss.Bottom
+		default:
+			pos = lipgloss.Top
 		}
 		result = lipgloss.JoinHorizontal(pos, items...)
 	} else {
-		pos := lipgloss.Left
-		if f.justify == AlignCenter {
+		var pos lipgloss.Position
+		switch f.justify {
+		case AlignCenter:
 			pos = lipgloss.Center
-		} else if f.justify == AlignEnd {
+		case AlignEnd:
 			pos = lipgloss.Right
+		default:
+			pos = lipgloss.Left
 		}
 		result = lipgloss.JoinVertical(pos, items...)
 	}

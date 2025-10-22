@@ -669,7 +669,7 @@ func (cv *ConfigView) getConstraintsText(config types.ConfigParams) string {
 		parts = append(parts, fmt.Sprintf("Max: %.2f", *config.Max))
 	}
 	
-	if config.Options != nil && len(config.Options) > 0 {
+	if len(config.Options) > 0 {
 		optionStrs := make([]string, len(config.Options))
 		for i, opt := range config.Options {
 			optionStrs[i] = fmt.Sprintf("%v", opt)

@@ -324,23 +324,6 @@ func (sb *StatusBar) getProgressColor(status types.ProgressStatus) lipgloss.Colo
 	}
 }
 
-// renderHelpLine renders keyboard shortcuts help
-func (sb *StatusBar) renderHelpLine() string {
-	shortcuts := []string{
-		"q Quit",
-		"h Help",
-		"1-4 Views",
-		"/ Search",
-		"Tab Navigate",
-	}
-
-	helpStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#565F89")).
-		Italic(true)
-
-	return helpStyle.Render(strings.Join(shortcuts, " │ "))
-}
-
 // GetHeight returns the current height needed for the status bar
 func (sb *StatusBar) GetHeight() int {
 	height := 1 // Base status line

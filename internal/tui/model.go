@@ -48,7 +48,6 @@ type Model struct {
 	// Current view state
 	viewMode    ViewMode
 	activePanel int
-	showHelp    bool
 
 	// Components
 	logViewer    *components.LogViewer

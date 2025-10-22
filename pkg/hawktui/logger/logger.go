@@ -164,7 +164,7 @@ func (l *Logger) log(level Level, message string, fields map[string]interface{})
 	// Format and write
 	formatted := l.format(entry)
 	if l.output != nil {
-		fmt.Fprintln(l.output, formatted)
+		_, _ = fmt.Fprintln(l.output, formatted)
 	}
 }
 
