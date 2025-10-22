@@ -5,8 +5,8 @@ import (
 	"sort"
 	"strings"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/bubbles/textinput"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/hawk-tui/hawk-tui/pkg/types"
 )
@@ -24,15 +24,15 @@ type ConfigView struct {
 	categories      map[string][]string
 
 	// State
-	filter         string
-	selectedConfig int
-	editMode       bool
-	editInput      textinput.Model
-	viewMode       ConfigViewMode
+	filter           string
+	selectedConfig   int
+	editMode         bool
+	editInput        textinput.Model
+	viewMode         ConfigViewMode
 	selectedCategory string
 
 	// Display options
-	showCategories  bool
+	showCategories   bool
 	showDescriptions bool
 }
 
@@ -49,7 +49,7 @@ const (
 func NewConfigView(styles interface{}) *ConfigView {
 	input := textinput.New()
 	input.Placeholder = "Enter new value..."
-	
+
 	return &ConfigView{
 		styles:           styles,
 		configs:          make(map[string]types.ConfigParams),
@@ -86,12 +86,12 @@ func (cv *ConfigView) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return cv, nil
 			}
 		}
-		
+
 		cv.editInput, cmd = cv.editInput.Update(msg)
 		if cmd != nil {
 			cmds = append(cmds, cmd)
 		}
-		
+
 		if len(cmds) > 0 {
 			return cv, tea.Batch(cmds...)
 		}
@@ -204,7 +204,7 @@ func (cv *ConfigView) Refresh() tea.Cmd {
 // updateCategories organizes configs into categories
 func (cv *ConfigView) updateCategories() {
 	cv.categories = make(map[string][]string)
-	
+
 	for key, config := range cv.configs {
 		category := config.Category
 		if category == "" {
@@ -216,13 +216,13 @@ func (cv *ConfigView) updateCategories() {
 				category = "General"
 			}
 		}
-		
+
 		if _, exists := cv.categories[category]; !exists {
 			cv.categories[category] = make([]string, 0)
 		}
 		cv.categories[category] = append(cv.categories[category], key)
 	}
-	
+
 	// Sort configs within each category
 	for category := range cv.categories {
 		sort.Strings(cv.categories[category])
@@ -244,7 +244,7 @@ func (cv *ConfigView) applyFilter() {
 	} else {
 		// Show configs
 		var configsToCheck []string
-		
+
 		if cv.viewMode == ConfigViewModeCategories && cv.selectedCategory != "" {
 			// Show configs from selected category
 			configsToCheck = cv.categories[cv.selectedCategory]
@@ -254,12 +254,12 @@ func (cv *ConfigView) applyFilter() {
 				configsToCheck = append(configsToCheck, key)
 			}
 		}
-		
+
 		for _, key := range configsToCheck {
 			config := cv.configs[key]
-			if cv.filter == "" || 
-			   strings.Contains(strings.ToLower(key), strings.ToLower(cv.filter)) ||
-			   strings.Contains(strings.ToLower(config.Description), strings.ToLower(cv.filter)) {
+			if cv.filter == "" ||
+				strings.Contains(strings.ToLower(key), strings.ToLower(cv.filter)) ||
+				strings.Contains(strings.ToLower(config.Description), strings.ToLower(cv.filter)) {
 				cv.filteredConfigs = append(cv.filteredConfigs, key)
 			}
 		}
@@ -293,7 +293,7 @@ func (cv *ConfigView) startEdit() {
 
 	key := cv.filteredConfigs[cv.selectedConfig]
 	config := cv.configs[key]
-	
+
 	cv.editMode = true
 	cv.editInput.SetValue(fmt.Sprintf("%v", config.Value))
 	cv.editInput.Focus()
@@ -308,16 +308,16 @@ func (cv *ConfigView) applyEdit() {
 	key := cv.filteredConfigs[cv.selectedConfig]
 	config := cv.configs[key]
 	newValue := cv.editInput.Value()
-	
+
 	// In a real implementation, you'd:
 	// 1. Validate the new value based on config.Type
 	// 2. Send the update via the protocol handler
 	// 3. Handle validation errors
-	
+
 	// For now, just update locally
 	config.Value = newValue
 	cv.configs[key] = config
-	
+
 	cv.editInput.Blur()
 }
 
@@ -329,7 +329,7 @@ func (cv *ConfigView) resetToDefault() {
 
 	key := cv.filteredConfigs[cv.selectedConfig]
 	config := cv.configs[key]
-	
+
 	if config.Default != nil {
 		config.Value = config.Default
 		cv.configs[key] = config
@@ -353,14 +353,14 @@ func (cv *ConfigView) renderListView() string {
 // renderCategoriesView renders configurations organized by categories
 func (cv *ConfigView) renderCategoriesView() string {
 	header := cv.renderHeader("Configuration (Categories)")
-	
+
 	var content string
 	if cv.selectedCategory == "" {
 		content = cv.renderCategoryList()
 	} else {
 		content = cv.renderConfigList()
 	}
-	
+
 	footer := cv.renderCategoryControls()
 
 	return lipgloss.JoinVertical(lipgloss.Left, header, content, footer)
@@ -376,15 +376,15 @@ func (cv *ConfigView) renderEditMode() string {
 	config := cv.configs[key]
 
 	var content []string
-	
+
 	// Title
 	content = append(content, lipgloss.NewStyle().
 		Bold(true).
 		Foreground(lipgloss.Color("#C0CAF5")).
 		Render(fmt.Sprintf("Editing: %s", key)))
-	
+
 	content = append(content, "")
-	
+
 	// Description
 	if config.Description != "" {
 		descStyle := lipgloss.NewStyle().
@@ -393,27 +393,27 @@ func (cv *ConfigView) renderEditMode() string {
 		content = append(content, descStyle.Render(config.Description))
 		content = append(content, "")
 	}
-	
+
 	// Current value
 	content = append(content, fmt.Sprintf("Current value: %v", config.Value))
-	
+
 	// Default value
 	if config.Default != nil {
 		content = append(content, fmt.Sprintf("Default value: %v", config.Default))
 	}
-	
+
 	// Type and constraints
 	constraints := cv.getConstraintsText(config)
 	if constraints != "" {
 		content = append(content, constraints)
 	}
-	
+
 	content = append(content, "")
-	
+
 	// Input field
 	content = append(content, "New value:")
 	content = append(content, cv.editInput.View())
-	
+
 	content = append(content, "")
 	content = append(content, "Press Enter to save, Esc to cancel")
 
@@ -441,7 +441,7 @@ func (cv *ConfigView) renderCategoryList() string {
 	for i, category := range categories {
 		selected := i == cv.selectedConfig
 		count := len(cv.categories[category])
-		
+
 		line := cv.renderCategoryLine(category, count, selected)
 		lines = append(lines, line)
 	}
@@ -452,7 +452,7 @@ func (cv *ConfigView) renderCategoryList() string {
 // renderConfigLine renders a single configuration line
 func (cv *ConfigView) renderConfigLine(config types.ConfigParams, selected bool) string {
 	lineStyle := lipgloss.NewStyle().Padding(0, 1)
-	
+
 	if selected {
 		lineStyle = lineStyle.Background(lipgloss.Color("#3D59A1"))
 	}
@@ -462,7 +462,7 @@ func (cv *ConfigView) renderConfigLine(config types.ConfigParams, selected bool)
 		Bold(true).
 		Foreground(lipgloss.Color("#C0CAF5")).
 		Width(30)
-	
+
 	key := config.Key
 	if len(key) > 27 {
 		key = key[:24] + "..."
@@ -472,7 +472,7 @@ func (cv *ConfigView) renderConfigLine(config types.ConfigParams, selected bool)
 	valueStyle := lipgloss.NewStyle().
 		Foreground(cv.getValueColor(config)).
 		Width(20)
-	
+
 	value := fmt.Sprintf("%v", config.Value)
 	if len(value) > 17 {
 		value = value[:14] + "..."
@@ -491,11 +491,11 @@ func (cv *ConfigView) renderConfigLine(config types.ConfigParams, selected bool)
 	if config.Value != config.Default {
 		indicators = append(indicators, "M") // Modified
 	}
-	
+
 	indicatorStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#FFD93D")).
 		Width(5)
-	
+
 	indicatorText := strings.Join(indicators, "")
 
 	line := lipgloss.JoinHorizontal(
@@ -512,12 +512,12 @@ func (cv *ConfigView) renderConfigLine(config types.ConfigParams, selected bool)
 			Foreground(lipgloss.Color("#565F89")).
 			Italic(true).
 			MarginLeft(2)
-		
+
 		description := config.Description
 		if len(description) > cv.width-10 {
 			description = description[:cv.width-13] + "..."
 		}
-		
+
 		line = lipgloss.JoinVertical(
 			lipgloss.Left,
 			line,
@@ -531,7 +531,7 @@ func (cv *ConfigView) renderConfigLine(config types.ConfigParams, selected bool)
 // renderCategoryLine renders a single category line
 func (cv *ConfigView) renderCategoryLine(category string, count int, selected bool) string {
 	lineStyle := lipgloss.NewStyle().Padding(0, 1)
-	
+
 	if selected {
 		lineStyle = lineStyle.Background(lipgloss.Color("#3D59A1"))
 	}
@@ -557,17 +557,17 @@ func (cv *ConfigView) renderCategoryLine(category string, count int, selected bo
 // renderHeader renders the configuration header
 func (cv *ConfigView) renderHeader(title string) string {
 	var parts []string
-	
+
 	parts = append(parts, title)
-	
+
 	if cv.filter != "" {
 		parts = append(parts, fmt.Sprintf("(Filter: %s)", cv.filter))
 	}
-	
+
 	parts = append(parts, fmt.Sprintf("(%d items)", len(cv.filteredConfigs)))
-	
+
 	headerText := strings.Join(parts, " ")
-	
+
 	return lipgloss.NewStyle().
 		Background(lipgloss.Color("#24283B")).
 		Foreground(lipgloss.Color("#C0CAF5")).
@@ -586,7 +586,7 @@ func (cv *ConfigView) renderListControls() string {
 		"c Categories",
 		"d Toggle Desc",
 	}
-	
+
 	return lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#565F89")).
 		Render(strings.Join(controls, " │ "))
@@ -595,7 +595,7 @@ func (cv *ConfigView) renderListControls() string {
 // renderCategoryControls renders controls for category view
 func (cv *ConfigView) renderCategoryControls() string {
 	var controls []string
-	
+
 	if cv.selectedCategory == "" {
 		controls = []string{
 			"↑↓ Navigate",
@@ -610,7 +610,7 @@ func (cv *ConfigView) renderCategoryControls() string {
 			"r Reset",
 		}
 	}
-	
+
 	return lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#565F89")).
 		Render(strings.Join(controls, " │ "))
@@ -639,7 +639,7 @@ func (cv *ConfigView) getValueColor(config types.ConfigParams) lipgloss.Color {
 	if config.Value != config.Default {
 		return lipgloss.Color("#FFD93D") // Yellow for modified values
 	}
-	
+
 	switch config.Type {
 	case types.ConfigTypeBoolean:
 		if value, ok := config.Value.(bool); ok && value {
@@ -658,17 +658,17 @@ func (cv *ConfigView) getValueColor(config types.ConfigParams) lipgloss.Color {
 // getConstraintsText returns text describing value constraints
 func (cv *ConfigView) getConstraintsText(config types.ConfigParams) string {
 	var parts []string
-	
+
 	parts = append(parts, fmt.Sprintf("Type: %s", config.Type))
-	
+
 	if config.Min != nil {
 		parts = append(parts, fmt.Sprintf("Min: %.2f", *config.Min))
 	}
-	
+
 	if config.Max != nil {
 		parts = append(parts, fmt.Sprintf("Max: %.2f", *config.Max))
 	}
-	
+
 	if len(config.Options) > 0 {
 		optionStrs := make([]string, len(config.Options))
 		for i, opt := range config.Options {
@@ -676,14 +676,14 @@ func (cv *ConfigView) getConstraintsText(config types.ConfigParams) string {
 		}
 		parts = append(parts, fmt.Sprintf("Options: %s", strings.Join(optionStrs, ", ")))
 	}
-	
+
 	if config.RestartRequired {
 		parts = append(parts, "Restart required")
 	}
-	
+
 	if len(parts) > 1 {
 		return strings.Join(parts, " | ")
 	}
-	
+
 	return ""
 }

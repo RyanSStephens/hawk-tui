@@ -55,27 +55,27 @@ type HandlerConfig struct {
 
 // HandlerMetrics contains performance and diagnostic metrics
 type HandlerMetrics struct {
-	MessagesReceived    int64
-	MessagesProcessed   int64
-	MessagesFailed      int64
-	BatchesReceived     int64
-	AverageProcessTime  time.Duration
-	LastMessageTime     time.Time
-	ErrorCount          map[string]int64
-	MessageTypeCount    map[string]int64
-	mu                  sync.RWMutex
+	MessagesReceived   int64
+	MessagesProcessed  int64
+	MessagesFailed     int64
+	BatchesReceived    int64
+	AverageProcessTime time.Duration
+	LastMessageTime    time.Time
+	ErrorCount         map[string]int64
+	MessageTypeCount   map[string]int64
+	mu                 sync.RWMutex
 }
 
 // MetricsSnapshot is a snapshot of metrics without the mutex for safe copying
 type MetricsSnapshot struct {
-	MessagesReceived    int64
-	MessagesProcessed   int64
-	MessagesFailed      int64
-	BatchesReceived     int64
-	AverageProcessTime  time.Duration
-	LastMessageTime     time.Time
-	ErrorCount          map[string]int64
-	MessageTypeCount    map[string]int64
+	MessagesReceived   int64
+	MessagesProcessed  int64
+	MessagesFailed     int64
+	BatchesReceived    int64
+	AverageProcessTime time.Duration
+	LastMessageTime    time.Time
+	ErrorCount         map[string]int64
+	MessageTypeCount   map[string]int64
 }
 
 // DefaultConfig returns a sensible default configuration
@@ -83,7 +83,7 @@ func DefaultConfig() HandlerConfig {
 	return HandlerConfig{
 		MaxMessageSize:    1024 * 1024, // 1MB
 		MaxBatchSize:      100,
-		RateLimit:         1000, // 1000 messages per second
+		RateLimit:         1000,      // 1000 messages per second
 		BufferSize:        64 * 1024, // 64KB
 		ValidationTimeout: 100 * time.Millisecond,
 		EnableMetrics:     true,

@@ -166,14 +166,14 @@ func Grid(columns int, children ...string) string {
 
 // Flexbox creates a flexible layout
 type Flexbox struct {
-	direction  Direction
-	wrap       bool
-	justify    Alignment
-	align      Alignment
-	gap        int
-	children   []FlexItem
-	width      int
-	height     int
+	direction Direction
+	wrap      bool
+	justify   Alignment
+	align     Alignment
+	gap       int
+	children  []FlexItem
+	width     int
+	height    int
 }
 
 // FlexItem represents an item in a flexbox

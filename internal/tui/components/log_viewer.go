@@ -6,8 +6,8 @@ import (
 	"strings"
 	"time"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/bubbles/viewport"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 	"github.com/hawk-tui/hawk-tui/pkg/types"
 )
@@ -15,24 +15,24 @@ import (
 // LogViewer component for displaying and filtering log messages
 type LogViewer struct {
 	// Layout
-	width    int
-	height   int
-	styles   interface{} // Will be *Styles from parent package
+	width  int
+	height int
+	styles interface{} // Will be *Styles from parent package
 
 	// Components
 	viewport viewport.Model
-	
+
 	// Data
 	logs         []types.LogParams
 	filteredLogs []types.LogParams
 	events       []types.EventParams
-	
+
 	// State
-	filter       string
-	levelFilter  string
-	showContext  bool
-	autoScroll   bool
-	
+	filter      string
+	levelFilter string
+	showContext bool
+	autoScroll  bool
+
 	// Display options
 	maxLogs      int
 	showSidebar  bool
@@ -43,7 +43,7 @@ type LogViewer struct {
 func NewLogViewer(styles interface{}) *LogViewer {
 	v := viewport.New(0, 0)
 	v.Style = lipgloss.NewStyle()
-	
+
 	return &LogViewer{
 		styles:       styles,
 		viewport:     v,
@@ -149,7 +149,7 @@ func (lv *LogViewer) View() string {
 	if lv.showSidebar {
 		return lv.renderWithSidebar()
 	}
-	
+
 	return lv.renderFullWidth()
 }
 
@@ -167,22 +167,22 @@ func (lv *LogViewer) AddLog(log types.LogParams) {
 		now := time.Now()
 		log.Timestamp = &now
 	}
-	
+
 	// Add to logs
 	lv.logs = append(lv.logs, log)
-	
+
 	// Limit log count
 	if len(lv.logs) > lv.maxLogs {
 		lv.logs = lv.logs[len(lv.logs)-lv.maxLogs:]
 	}
-	
+
 	lv.applyFilter()
 }
 
 // AddEvent adds an event that will be displayed as a log entry
 func (lv *LogViewer) AddEvent(event types.EventParams) {
 	lv.events = append(lv.events, event)
-	
+
 	// Convert event to log format for display
 	logLevel := types.LogLevelInfo
 	switch event.Severity {
@@ -193,7 +193,7 @@ func (lv *LogViewer) AddEvent(event types.EventParams) {
 	case types.EventSeveritySuccess:
 		logLevel = types.LogLevelSuccess
 	}
-	
+
 	log := types.LogParams{
 		Message:   fmt.Sprintf("[EVENT] %s: %s", event.Title, event.Message),
 		Level:     logLevel,
@@ -201,7 +201,7 @@ func (lv *LogViewer) AddEvent(event types.EventParams) {
 		Tags:      []string{"event", event.Type},
 		Context:   event.Data,
 	}
-	
+
 	lv.AddLog(log)
 }
 
@@ -220,23 +220,23 @@ func (lv *LogViewer) Refresh() tea.Cmd {
 // applyFilter applies current filters to the log list
 func (lv *LogViewer) applyFilter() {
 	lv.filteredLogs = make([]types.LogParams, 0)
-	
+
 	for _, log := range lv.logs {
 		// Apply level filter
 		if lv.levelFilter != "" && string(log.Level) != lv.levelFilter {
 			continue
 		}
-		
+
 		// Apply text filter
 		if lv.filter != "" {
 			filterLower := strings.ToLower(lv.filter)
 			messageLower := strings.ToLower(log.Message)
 			componentLower := strings.ToLower(log.Component)
-			
+
 			// Check message, component, and tags
 			matches := strings.Contains(messageLower, filterLower) ||
 				strings.Contains(componentLower, filterLower)
-			
+
 			if !matches && log.Tags != nil {
 				for _, tag := range log.Tags {
 					if strings.Contains(strings.ToLower(tag), filterLower) {
@@ -245,15 +245,15 @@ func (lv *LogViewer) applyFilter() {
 					}
 				}
 			}
-			
+
 			if !matches {
 				continue
 			}
 		}
-		
+
 		lv.filteredLogs = append(lv.filteredLogs, log)
 	}
-	
+
 	// Sort by timestamp
 	sort.Slice(lv.filteredLogs, func(i, j int) bool {
 		if lv.filteredLogs[i].Timestamp == nil || lv.filteredLogs[j].Timestamp == nil {
@@ -261,7 +261,7 @@ func (lv *LogViewer) applyFilter() {
 		}
 		return lv.filteredLogs[i].Timestamp.Before(*lv.filteredLogs[j].Timestamp)
 	})
-	
+
 	lv.refreshView()
 }
 
@@ -279,7 +279,7 @@ func (lv *LogViewer) updateLayout() {
 		lv.viewport.Width = lv.width - 2
 	}
 	lv.viewport.Height = lv.height - 4 // Account for borders and header
-	
+
 	lv.refreshView()
 }
 
@@ -287,7 +287,7 @@ func (lv *LogViewer) updateLayout() {
 func (lv *LogViewer) renderWithSidebar() string {
 	sidebar := lv.renderSidebar()
 	main := lv.renderMain()
-	
+
 	return lipgloss.JoinHorizontal(
 		lipgloss.Top,
 		sidebar,
@@ -310,18 +310,18 @@ func (lv *LogViewer) renderSidebar() string {
 		BorderForeground(lipgloss.Color("#414868"))
 
 	var content []string
-	
+
 	// Title
 	content = append(content, lipgloss.NewStyle().Bold(true).Render("Log Filters"))
 	content = append(content, "")
-	
+
 	// Level filter status
 	levelStatus := "All"
 	if lv.levelFilter != "" {
 		levelStatus = lv.levelFilter
 	}
 	content = append(content, fmt.Sprintf("Level: %s", levelStatus))
-	
+
 	// Text filter status
 	textStatus := "None"
 	if lv.filter != "" {
@@ -332,13 +332,13 @@ func (lv *LogViewer) renderSidebar() string {
 	}
 	content = append(content, fmt.Sprintf("Text: %s", textStatus))
 	content = append(content, "")
-	
+
 	// Statistics
 	content = append(content, lipgloss.NewStyle().Bold(true).Render("Statistics"))
 	content = append(content, "")
 	content = append(content, fmt.Sprintf("Total: %d", len(lv.logs)))
 	content = append(content, fmt.Sprintf("Filtered: %d", len(lv.filteredLogs)))
-	
+
 	// Level counts
 	levelCounts := lv.getLevelCounts()
 	for level, count := range levelCounts {
@@ -346,9 +346,9 @@ func (lv *LogViewer) renderSidebar() string {
 			content = append(content, fmt.Sprintf("%s: %d", level, count))
 		}
 	}
-	
+
 	content = append(content, "")
-	
+
 	// Controls
 	content = append(content, lipgloss.NewStyle().Bold(true).Render("Controls"))
 	content = append(content, "")
@@ -360,7 +360,7 @@ func (lv *LogViewer) renderSidebar() string {
 	content = append(content, "c - Toggle context")
 	content = append(content, "a - Toggle auto-scroll")
 	content = append(content, "s - Toggle sidebar")
-	
+
 	return baseStyle.Render(strings.Join(content, "\n"))
 }
 
@@ -372,39 +372,39 @@ func (lv *LogViewer) renderMain() string {
 	} else {
 		width = lv.width
 	}
-	
+
 	// Create header
 	header := lv.renderHeader()
-	
+
 	// Create bordered viewport
 	mainStyle := lipgloss.NewStyle().
 		Width(width).
 		Height(lv.height).
 		Border(lipgloss.RoundedBorder()).
 		BorderForeground(lipgloss.Color("#414868"))
-	
+
 	// Combine header and viewport
 	content := lipgloss.JoinVertical(
 		lipgloss.Left,
 		header,
 		lv.viewport.View(),
 	)
-	
+
 	return mainStyle.Render(content)
 }
 
 // renderHeader renders the log viewer header
 func (lv *LogViewer) renderHeader() string {
 	var parts []string
-	
+
 	// Title
 	title := "Logs"
 	if lv.filter != "" || lv.levelFilter != "" {
 		title += " (Filtered)"
 	}
-	
+
 	parts = append(parts, lipgloss.NewStyle().Bold(true).Render(title))
-	
+
 	// Status indicators
 	var indicators []string
 	if lv.autoScroll {
@@ -413,24 +413,24 @@ func (lv *LogViewer) renderHeader() string {
 	if lv.showContext {
 		indicators = append(indicators, "Context")
 	}
-	
+
 	if len(indicators) > 0 {
 		parts = append(parts, fmt.Sprintf("[%s]", strings.Join(indicators, ", ")))
 	}
-	
+
 	// Count
 	count := fmt.Sprintf("(%d/%d)", len(lv.filteredLogs), len(lv.logs))
 	parts = append(parts, count)
-	
+
 	headerText := strings.Join(parts, " ")
-	
+
 	headerStyle := lipgloss.NewStyle().
 		Background(lipgloss.Color("#24283B")).
 		Foreground(lipgloss.Color("#C0CAF5")).
 		Padding(0, 1).
 		Width(lv.viewport.Width).
 		Bold(true)
-	
+
 	return headerStyle.Render(headerText)
 }
 
@@ -445,31 +445,31 @@ func (lv *LogViewer) renderLogs() string {
 			Height(lv.viewport.Height).
 			Render("No logs to display")
 	}
-	
+
 	var lines []string
-	
+
 	for _, log := range lv.filteredLogs {
 		lines = append(lines, lv.renderLogEntry(log))
 	}
-	
+
 	return strings.Join(lines, "\n")
 }
 
 // renderLogEntry renders a single log entry
 func (lv *LogViewer) renderLogEntry(log types.LogParams) string {
 	var parts []string
-	
+
 	// Timestamp
 	timestamp := "----"
 	if log.Timestamp != nil {
 		timestamp = log.Timestamp.Format("15:04:05")
 	}
-	
+
 	timestampStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#565F89")).
 		Width(8)
 	parts = append(parts, timestampStyle.Render(timestamp))
-	
+
 	// Level
 	levelStyle := lv.getLevelStyle(string(log.Level))
 	level := string(log.Level)
@@ -477,7 +477,7 @@ func (lv *LogViewer) renderLogEntry(log types.LogParams) string {
 		level = "INFO"
 	}
 	parts = append(parts, levelStyle.Width(5).Align(lipgloss.Center).Render(level))
-	
+
 	// Component
 	if log.Component != "" {
 		componentStyle := lipgloss.NewStyle().
@@ -489,14 +489,14 @@ func (lv *LogViewer) renderLogEntry(log types.LogParams) string {
 		}
 		parts = append(parts, componentStyle.Render(component))
 	}
-	
+
 	// Message
 	messageStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#C0CAF5"))
 	parts = append(parts, messageStyle.Render(log.Message))
-	
+
 	line := strings.Join(parts, " ")
-	
+
 	// Add context if enabled and available
 	if lv.showContext && log.Context != nil && len(log.Context) > 0 {
 		contextLines := []string{line}
@@ -509,7 +509,7 @@ func (lv *LogViewer) renderLogEntry(log types.LogParams) string {
 		}
 		line = strings.Join(contextLines, "\n")
 	}
-	
+
 	// Add tags if available
 	if len(log.Tags) > 0 {
 		tagStyle := lipgloss.NewStyle().
@@ -517,22 +517,22 @@ func (lv *LogViewer) renderLogEntry(log types.LogParams) string {
 			Background(lipgloss.Color("#1A1B26")).
 			Padding(0, 1).
 			MarginLeft(1)
-		
+
 		tagStrings := make([]string, len(log.Tags))
 		for i, tag := range log.Tags {
 			tagStrings[i] = tagStyle.Render(tag)
 		}
-		
+
 		line += " " + strings.Join(tagStrings, " ")
 	}
-	
+
 	return line
 }
 
 // getLevelStyle returns the appropriate style for a log level
 func (lv *LogViewer) getLevelStyle(level string) lipgloss.Style {
 	baseStyle := lipgloss.NewStyle().Bold(true)
-	
+
 	switch level {
 	case "DEBUG":
 		return baseStyle.Foreground(lipgloss.Color("#ADB5BD"))
@@ -552,7 +552,7 @@ func (lv *LogViewer) getLevelStyle(level string) lipgloss.Style {
 // getLevelCounts returns counts for each log level
 func (lv *LogViewer) getLevelCounts() map[string]int {
 	counts := make(map[string]int)
-	
+
 	for _, log := range lv.logs {
 		level := string(log.Level)
 		if level == "" {
@@ -560,6 +560,6 @@ func (lv *LogViewer) getLevelCounts() map[string]int {
 		}
 		counts[level]++
 	}
-	
+
 	return counts
 }

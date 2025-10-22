@@ -17,9 +17,9 @@ import (
 type ExampleMessageHandler struct{}
 
 func (h *ExampleMessageHandler) HandleLog(params types.LogParams, msgID interface{}) error {
-	fmt.Printf("[%s] %s: %s\n", 
-		params.Timestamp.Format("15:04:05"), 
-		params.Level, 
+	fmt.Printf("[%s] %s: %s\n",
+		params.Timestamp.Format("15:04:05"),
+		params.Level,
 		params.Message)
 	if params.Context != nil {
 		fmt.Printf("  Context: %+v\n", params.Context)
@@ -28,10 +28,10 @@ func (h *ExampleMessageHandler) HandleLog(params types.LogParams, msgID interfac
 }
 
 func (h *ExampleMessageHandler) HandleMetric(params types.MetricParams, msgID interface{}) error {
-	fmt.Printf("METRIC [%s] %s = %.2f %s (%s)\n", 
+	fmt.Printf("METRIC [%s] %s = %.2f %s (%s)\n",
 		params.Timestamp.Format("15:04:05"),
-		params.Name, 
-		params.Value, 
+		params.Name,
+		params.Value,
 		params.Unit,
 		params.Type)
 	if params.Tags != nil {
@@ -70,7 +70,7 @@ func (h *ExampleMessageHandler) HandleDashboard(params types.DashboardParams, ms
 }
 
 func (h *ExampleMessageHandler) HandleEvent(params types.EventParams, msgID interface{}) error {
-	fmt.Printf("EVENT [%s] %s: %s (%s)\n", 
+	fmt.Printf("EVENT [%s] %s: %s (%s)\n",
 		params.Timestamp.Format("15:04:05"),
 		params.Type,
 		params.Title,
@@ -125,36 +125,36 @@ func main() {
 	exampleMessages := []string{
 		// Log message
 		`{"jsonrpc": "2.0", "method": "hawk.log", "params": {"message": "Server started successfully", "level": "SUCCESS", "component": "server"}, "id": 1}`,
-		
+
 		// Metric message
 		`{"jsonrpc": "2.0", "method": "hawk.metric", "params": {"name": "requests_per_second", "value": 145.7, "type": "gauge", "unit": "req/s", "tags": {"endpoint": "/api/users"}}}`,
-		
+
 		// Config message
 		`{"jsonrpc": "2.0", "method": "hawk.config", "params": {"key": "server.port", "value": 8080, "type": "integer", "description": "HTTP server port", "min": 1, "max": 65535}}`,
-		
+
 		// Progress message
 		`{"jsonrpc": "2.0", "method": "hawk.progress", "params": {"id": "upload_001", "label": "Uploading file", "current": 75, "total": 100, "unit": "%", "status": "in_progress"}}`,
-		
+
 		// Dashboard message with status grid
 		`{"jsonrpc": "2.0", "method": "hawk.dashboard", "params": {"widget_id": "services", "type": "status_grid", "title": "Service Status", "data": {"Database": {"status": "healthy", "response_time": "12ms"}, "Redis": {"status": "healthy", "response_time": "2ms"}}}}`,
-		
+
 		// Event message
 		`{"jsonrpc": "2.0", "method": "hawk.event", "params": {"type": "deployment", "title": "Deployment Completed", "message": "Version 2.1.0 deployed successfully", "severity": "success"}}`,
-		
+
 		// Batch message
 		`[
 			{"jsonrpc": "2.0", "method": "hawk.log", "params": {"message": "Processing batch"}},
 			{"jsonrpc": "2.0", "method": "hawk.metric", "params": {"name": "batch_size", "value": 100}},
 			{"jsonrpc": "2.0", "method": "hawk.metric", "params": {"name": "processing_time", "value": 0.125, "unit": "seconds"}}
 		]`,
-		
+
 		// Invalid message (will generate error)
 		`{"jsonrpc": "2.0", "method": "hawk.invalid", "params": {}}`,
 	}
 
 	// Create input reader from example messages
 	input := strings.NewReader(strings.Join(exampleMessages, "\n"))
-	
+
 	// Create output buffer (normally this would be stdout)
 	output := &bytes.Buffer{}
 
@@ -219,7 +219,7 @@ func main() {
 
 	// Send command execution request
 	handler.SendExecuteCommand("restart_workers", map[string]interface{}{
-		"force": true,
+		"force":   true,
 		"timeout": 30,
 	})
 

@@ -22,13 +22,13 @@ func main() {
 	sendConfig("log.level", "INFO", "Logging level")
 	sendConfig("server.port", 8080, "Server port number")
 	sendConfig("server.timeout", 30.0, "Request timeout in seconds")
-	
+
 	// Send initial log messages
 	sendLog("Application starting up...", "INFO", map[string]interface{}{
 		"version": "1.0.0",
 		"pid":     os.Getpid(),
 	})
-	
+
 	sendLog("Configuration loaded", "SUCCESS", nil)
 	sendLog("Database connection established", "INFO", map[string]interface{}{
 		"host": "localhost",
@@ -65,7 +65,7 @@ func main() {
 
 	// Simulate real-time metrics
 	fmt.Fprintln(os.Stderr, "Sending real-time metrics... (Press Ctrl+C to stop)")
-	
+
 	startTime := time.Now()
 	ticker := time.NewTicker(1 * time.Second)
 	defer ticker.Stop()
@@ -74,26 +74,26 @@ func main() {
 		select {
 		case <-ticker.C:
 			elapsed := time.Since(startTime)
-			
+
 			// System metrics
 			sendMetric("system.cpu.usage", 15+rand.Float64()*70, "gauge", "%")
 			sendMetric("system.memory.usage", 30+rand.Float64()*40, "gauge", "%")
 			sendMetric("system.disk.usage", 25+rand.Float64()*20, "gauge", "%")
 			sendMetric("system.network.rx", rand.Float64()*1000, "gauge", "KB/s")
 			sendMetric("system.network.tx", rand.Float64()*500, "gauge", "KB/s")
-			
+
 			// Application metrics
 			sendMetric("app.requests.total", float64(time.Now().Unix()%10000), "counter", "")
 			sendMetric("app.requests.per_second", 50+rand.Float64()*200, "gauge", "req/s")
 			sendMetric("app.response.time.avg", 10+rand.Float64()*100, "gauge", "ms")
 			sendMetric("app.errors.rate", rand.Float64()*5, "gauge", "%")
 			sendMetric("app.active.connections", float64(50+rand.Intn(200)), "gauge", "")
-			
+
 			// Database metrics
 			sendMetric("db.connections.active", float64(10+rand.Intn(90)), "gauge", "")
 			sendMetric("db.queries.per_second", 20+rand.Float64()*80, "gauge", "q/s")
 			sendMetric("db.query.time.avg", 5+rand.Float64()*50, "gauge", "ms")
-			
+
 			// Occasionally send log messages
 			if elapsed.Seconds() > 0 && int(elapsed.Seconds())%5 == 0 {
 				switch rand.Intn(4) {
@@ -111,9 +111,9 @@ func main() {
 					})
 				case 2:
 					sendLog("Database query executed", "DEBUG", map[string]interface{}{
-						"query":      "SELECT * FROM users WHERE active = true",
-						"duration":   fmt.Sprintf("%dms", rand.Intn(50)),
-						"rows":       rand.Intn(100),
+						"query":    "SELECT * FROM users WHERE active = true",
+						"duration": fmt.Sprintf("%dms", rand.Intn(50)),
+						"rows":     rand.Intn(100),
 					})
 				case 3:
 					if rand.Float64() < 0.1 { // 10% chance of error
@@ -126,7 +126,7 @@ func main() {
 					}
 				}
 			}
-			
+
 			// Occasionally send events
 			if elapsed.Seconds() > 0 && int(elapsed.Seconds())%30 == 0 {
 				events := []struct {
@@ -139,7 +139,7 @@ func main() {
 					{"backup_completed", "Backup Complete", "Daily backup completed successfully", "success"},
 					{"high_cpu_usage", "High CPU Usage", "CPU usage is above 80%", "warning"},
 				}
-				
+
 				event := events[rand.Intn(len(events))]
 				sendEvent(event.eventType, event.title, event.message, event.severity, map[string]interface{}{
 					"timestamp": time.Now().Format(time.RFC3339),
@@ -156,10 +156,10 @@ func sendLog(message, level string, context map[string]interface{}) {
 		Level:   types.LogLevel(level),
 		Context: context,
 	}
-	
+
 	now := time.Now()
 	params.Timestamp = &now
-	
+
 	msg := types.NewLogMessage(params, nil)
 	sendMessage(msg)
 }
@@ -171,10 +171,10 @@ func sendMetric(name string, value float64, metricType, unit string) {
 		Type:  types.MetricType(metricType),
 		Unit:  unit,
 	}
-	
+
 	now := time.Now()
 	params.Timestamp = &now
-	
+
 	msg := types.NewMetricMessage(params, nil)
 	sendMessage(msg)
 }
@@ -185,7 +185,7 @@ func sendConfig(key string, value interface{}, description string) {
 		Value:       value,
 		Description: description,
 	}
-	
+
 	// Set type based on value
 	switch value.(type) {
 	case string:
@@ -197,7 +197,7 @@ func sendConfig(key string, value interface{}, description string) {
 	case bool:
 		params.Type = types.ConfigTypeBoolean
 	}
-	
+
 	msg := types.NewConfigMessage(params, nil)
 	sendMessage(msg)
 }
@@ -212,7 +212,7 @@ func sendProgress(id, label string, current, total float64, unit, status, detail
 		Status:  types.ProgressStatus(status),
 		Details: details,
 	}
-	
+
 	msg := types.NewProgressMessage(params, nil)
 	sendMessage(msg)
 }
@@ -224,7 +224,7 @@ func sendDashboard(widgetID, widgetType, title string, data interface{}) {
 		Title:    title,
 		Data:     data,
 	}
-	
+
 	msg := types.NewDashboardMessage(params, nil)
 	sendMessage(msg)
 }
@@ -237,10 +237,10 @@ func sendEvent(eventType, title, message, severity string, data map[string]inter
 		Severity: types.EventSeverity(severity),
 		Data:     data,
 	}
-	
+
 	now := time.Now()
 	params.Timestamp = &now
-	
+
 	msg := types.NewEventMessage(params, nil)
 	sendMessage(msg)
 }
@@ -251,6 +251,6 @@ func sendMessage(msg *types.JSONRPCMessage) {
 		fmt.Fprintf(os.Stderr, "Error marshaling message: %v\n", err)
 		return
 	}
-	
+
 	fmt.Println(string(data))
 }

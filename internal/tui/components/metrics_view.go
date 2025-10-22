@@ -159,7 +159,7 @@ func (mv *MetricsView) View() string {
 func (mv *MetricsView) SetSize(width, height int) {
 	mv.width = width
 	mv.height = height
-	
+
 	// Adjust columns based on width
 	maxColumns := mv.width / 25 // Minimum 25 chars per column
 	if mv.columns > maxColumns {
@@ -264,7 +264,7 @@ func (mv *MetricsView) renderGridView() string {
 	}
 
 	header := mv.renderHeader("Metrics Grid")
-	
+
 	var rows []string
 	var currentRow []string
 
@@ -281,7 +281,7 @@ func (mv *MetricsView) renderGridView() string {
 	}
 
 	content := strings.Join(rows, "\n")
-	
+
 	// Add controls footer
 	footer := mv.renderGridControls()
 
@@ -295,7 +295,7 @@ func (mv *MetricsView) renderListView() string {
 	}
 
 	header := mv.renderHeader("Metrics List")
-	
+
 	// Calculate column widths
 	nameWidth := 30
 	valueWidth := 15
@@ -304,7 +304,7 @@ func (mv *MetricsView) renderListView() string {
 
 	// Headers
 	headerRow := mv.renderListHeader(nameWidth, valueWidth, unitWidth, timeWidth)
-	
+
 	var rows []string
 	rows = append(rows, headerRow)
 
@@ -331,7 +331,7 @@ func (mv *MetricsView) renderChartView() string {
 	history := mv.metricHistory[selectedName]
 
 	header := mv.renderHeader(fmt.Sprintf("Chart: %s", selectedName))
-	
+
 	var content string
 	if len(history) > 1 {
 		content = mv.renderChart(selectedName, history)
@@ -344,7 +344,7 @@ func (mv *MetricsView) renderChartView() string {
 
 	// Add current value
 	valueDisplay := mv.renderCurrentValue(metric)
-	
+
 	footer := mv.renderChartControls()
 
 	return lipgloss.JoinVertical(lipgloss.Left, header, valueDisplay, content, footer)
@@ -387,7 +387,7 @@ func (mv *MetricsView) renderMetricCard(metric types.MetricParams, selected bool
 	if metric.Unit != "" {
 		valueText += " " + metric.Unit
 	}
-	
+
 	valueStyle := lipgloss.NewStyle().
 		Bold(true).
 		Foreground(mv.getValueColor(metric)).
@@ -424,7 +424,7 @@ func (mv *MetricsView) renderMetricCard(metric types.MetricParams, selected bool
 // renderMetricRow renders a single metric as a table row
 func (mv *MetricsView) renderMetricRow(metric types.MetricParams, selected bool, nameWidth, valueWidth, unitWidth, timeWidth int) string {
 	rowStyle := lipgloss.NewStyle().Padding(0, 1)
-	
+
 	if selected {
 		rowStyle = rowStyle.Background(lipgloss.Color("#3D59A1"))
 	}
@@ -503,10 +503,10 @@ func (mv *MetricsView) renderChart(name string, history []MetricPoint) string {
 	for row := mv.chartHeight - 1; row >= 0; row-- {
 		// Calculate value for this row
 		rowValue := minVal + (maxVal-minVal)*float64(row)/float64(mv.chartHeight-1)
-		
+
 		// Y-axis label
 		label := fmt.Sprintf("%8.1f │", rowValue)
-		
+
 		// Chart line
 		var chartLine strings.Builder
 		for i := 0; i < len(history) && i < chartWidth; i++ {
@@ -514,11 +514,11 @@ func (mv *MetricsView) renderChart(name string, history []MetricPoint) string {
 			if i >= len(point) {
 				break
 			}
-			
+
 			// Normalize value to chart height
 			normalizedValue := (point[i].Value - minVal) / (maxVal - minVal)
 			pointRow := int(normalizedValue * float64(mv.chartHeight-1))
-			
+
 			if pointRow == row {
 				chartLine.WriteString("●")
 			} else if pointRow < row {
@@ -527,7 +527,7 @@ func (mv *MetricsView) renderChart(name string, history []MetricPoint) string {
 				chartLine.WriteString(" ")
 			}
 		}
-		
+
 		line := label + chartLine.String()
 		lines = append(lines, line)
 	}
@@ -557,10 +557,10 @@ func (mv *MetricsView) renderMiniGauge(value, min, max float64, width int) strin
 	empty := width - filled
 
 	gauge := strings.Repeat("█", filled) + strings.Repeat("░", empty)
-	
+
 	gaugeStyle := lipgloss.NewStyle().
 		Foreground(mv.getGaugeColor(percentage))
-	
+
 	return gaugeStyle.Render(gauge)
 }
 
@@ -615,15 +615,15 @@ func (mv *MetricsView) getGaugeColor(percentage float64) lipgloss.Color {
 func (mv *MetricsView) renderHeader(title string) string {
 	var parts []string
 	parts = append(parts, title)
-	
+
 	// Add filter info
 	if mv.filter != "" {
 		parts = append(parts, fmt.Sprintf("(Filter: %s)", mv.filter))
 	}
-	
+
 	// Add count
 	parts = append(parts, fmt.Sprintf("(%d metrics)", len(mv.filteredMetrics)))
-	
+
 	// Add sort info
 	sortInfo := ""
 	switch mv.sortBy {
@@ -635,9 +635,9 @@ func (mv *MetricsView) renderHeader(title string) string {
 		sortInfo = "Sort: Time"
 	}
 	parts = append(parts, sortInfo)
-	
+
 	headerText := strings.Join(parts, " ")
-	
+
 	return lipgloss.NewStyle().
 		Background(lipgloss.Color("#24283B")).
 		Foreground(lipgloss.Color("#C0CAF5")).
@@ -701,11 +701,11 @@ func (mv *MetricsView) renderGridControls() string {
 		"↑↓ Navigate",
 		"← → Columns",
 		"g Grid",
-		"L List", 
+		"L List",
 		"c Chart",
 		"n/v/t Sort",
 	}
-	
+
 	return lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#565F89")).
 		Render(strings.Join(controls, " │ "))
@@ -720,7 +720,7 @@ func (mv *MetricsView) renderListControls() string {
 		"c Chart",
 		"n/v/t Sort",
 	}
-	
+
 	return lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#565F89")).
 		Render(strings.Join(controls, " │ "))
@@ -735,7 +735,7 @@ func (mv *MetricsView) renderChartControls() string {
 		"c Chart",
 		"+/- Chart Height",
 	}
-	
+
 	return lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#565F89")).
 		Render(strings.Join(controls, " │ "))

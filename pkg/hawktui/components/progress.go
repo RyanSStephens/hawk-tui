@@ -12,14 +12,14 @@ import (
 // ProgressBar represents a progress indicator
 type ProgressBar struct {
 	*BaseComponent
-	current    float64
-	max        float64
-	label      string
-	showValue  bool
+	current     float64
+	max         float64
+	label       string
+	showValue   bool
 	showPercent bool
-	barWidth   int
-	fillChar   string
-	emptyChar  string
+	barWidth    int
+	fillChar    string
+	emptyChar   string
 }
 
 // NewProgressBar creates a new progress bar

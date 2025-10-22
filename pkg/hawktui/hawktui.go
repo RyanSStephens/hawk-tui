@@ -135,10 +135,10 @@ var (
 
 // Re-export theme constructors
 var (
-	ThemeDark    = styles.DarkTheme
-	ThemeLight   = styles.LightTheme
-	ThemeNord    = styles.NordTheme
-	ThemeDracula = styles.DraculaTheme
+	ThemeDark       = styles.DarkTheme
+	ThemeLight      = styles.LightTheme
+	ThemeNord       = styles.NordTheme
+	ThemeDracula    = styles.DraculaTheme
 	ThemeCatppuccin = styles.CatppuccinTheme
 )
 

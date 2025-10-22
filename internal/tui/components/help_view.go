@@ -3,8 +3,8 @@ package components
 import (
 	"strings"
 
-	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/bubbles/viewport"
+	tea "github.com/charmbracelet/bubbletea"
 	"github.com/charmbracelet/lipgloss"
 )
 
@@ -24,12 +24,12 @@ type HelpView struct {
 func NewHelpView(styles interface{}) *HelpView {
 	v := viewport.New(0, 0)
 	v.Style = lipgloss.NewStyle()
-	
+
 	hv := &HelpView{
 		styles:   styles,
 		viewport: v,
 	}
-	
+
 	hv.generateHelpContent()
 	return hv
 }
@@ -76,7 +76,7 @@ func (hv *HelpView) View() string {
 
 	header := hv.renderHeader()
 	footer := hv.renderFooter()
-	
+
 	return lipgloss.JoinVertical(
 		lipgloss.Left,
 		header,
@@ -89,11 +89,11 @@ func (hv *HelpView) View() string {
 func (hv *HelpView) SetSize(width, height int) {
 	hv.width = width
 	hv.height = height
-	
+
 	// Update viewport size (account for header and footer)
-	hv.viewport.Width = width - 2  // Account for borders
+	hv.viewport.Width = width - 2   // Account for borders
 	hv.viewport.Height = height - 4 // Account for header, footer, and borders
-	
+
 	// Update content
 	hv.viewport.SetContent(hv.helpContent)
 }
@@ -108,7 +108,7 @@ func (hv *HelpView) generateHelpContent() {
 		Foreground(lipgloss.Color("#00D7FF")).
 		Align(lipgloss.Center).
 		Render("🦅 Hawk TUI - Help & Documentation")
-	
+
 	sections = append(sections, title)
 	sections = append(sections, "")
 
@@ -117,7 +117,7 @@ func (hv *HelpView) generateHelpContent() {
 		Bold(true).
 		Foreground(lipgloss.Color("#C0CAF5")).
 		Render("OVERVIEW")
-	
+
 	sections = append(sections, overview)
 	sections = append(sections, "")
 	sections = append(sections, "Hawk TUI is a universal Terminal User Interface framework for monitoring")
@@ -287,7 +287,7 @@ func (hv *HelpView) generateHelpContent() {
 		Bold(true).
 		Foreground(lipgloss.Color("#C0CAF5")).
 		Render("ABOUT")
-	
+
 	sections = append(sections, about)
 	sections = append(sections, "")
 	sections = append(sections, "Hawk TUI v1.0.0")
@@ -311,23 +311,23 @@ type HelpItem struct {
 // renderSection renders a help section with items
 func (hv *HelpView) renderSection(title string, items []HelpItem) string {
 	var lines []string
-	
+
 	// Section title
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
 		Foreground(lipgloss.Color("#C0CAF5"))
 	lines = append(lines, titleStyle.Render(title))
 	lines = append(lines, "")
-	
+
 	// Items
 	keyStyle := lipgloss.NewStyle().
 		Bold(true).
 		Foreground(lipgloss.Color("#00D7FF")).
 		Width(20)
-	
+
 	descStyle := lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#9AA5CE"))
-	
+
 	for _, item := range items {
 		line := lipgloss.JoinHorizontal(
 			lipgloss.Top,
@@ -336,7 +336,7 @@ func (hv *HelpView) renderSection(title string, items []HelpItem) string {
 		)
 		lines = append(lines, line)
 	}
-	
+
 	lines = append(lines, "")
 	return strings.Join(lines, "\n")
 }
@@ -344,27 +344,27 @@ func (hv *HelpView) renderSection(title string, items []HelpItem) string {
 // renderHeader renders the help view header
 func (hv *HelpView) renderHeader() string {
 	title := "Help & Documentation"
-	
+
 	headerStyle := lipgloss.NewStyle().
 		Background(lipgloss.Color("#24283B")).
 		Foreground(lipgloss.Color("#C0CAF5")).
 		Padding(0, 1).
 		Width(hv.width).
 		Bold(true)
-	
+
 	return headerStyle.Render(title)
 }
 
 // renderFooter renders the help view footer
 func (hv *HelpView) renderFooter() string {
 	controls := "↑↓ Scroll │ PgUp/PgDn Page │ Home/End Top/Bottom │ Esc Close Help"
-	
+
 	footerStyle := lipgloss.NewStyle().
 		Background(lipgloss.Color("#24283B")).
 		Foreground(lipgloss.Color("#565F89")).
 		Padding(0, 1).
 		Width(hv.width).
 		Italic(true)
-	
+
 	return footerStyle.Render(controls)
 }

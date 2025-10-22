@@ -15,8 +15,8 @@ type Tab struct {
 // Tabs represents a tabbed interface
 type Tabs struct {
 	*BaseComponent
-	tabs       []Tab
-	activeTab  int
+	tabs        []Tab
+	activeTab   int
 	onTabChange func(int)
 }
 

@@ -13,7 +13,7 @@ func TestTUIInitialization(t *testing.T) {
 		LogLevel: "info",
 		Debug:    false,
 	}
-	
+
 	model, err := NewModel(config)
 	if err != nil {
 		t.Fatalf("Expected no error creating model, got %v", err)
@@ -50,7 +50,7 @@ func TestHandleLogMessage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create model: %v", err)
 	}
-	
+
 	// Test log message handling
 	now := time.Now()
 	logParams := types.LogParams{
@@ -92,7 +92,7 @@ func TestHandleMetricMessage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create model: %v", err)
 	}
-	
+
 	// Test metric message handling
 	now := time.Now()
 	metricParams := types.MetricParams{
@@ -139,7 +139,7 @@ func TestHandleConfigMessage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create model: %v", err)
 	}
-	
+
 	// Test config message handling
 	configParams := types.ConfigParams{
 		Key:         "server_port",
@@ -184,7 +184,7 @@ func TestHandleProgressMessage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create model: %v", err)
 	}
-	
+
 	// Test progress message handling
 	progressParams := types.ProgressParams{
 		ID:      "file_upload",
@@ -240,7 +240,7 @@ func TestHandleEventMessage(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create model: %v", err)
 	}
-	
+
 	// Test event message handling
 	now := time.Now()
 	eventParams := types.EventParams{
@@ -288,10 +288,10 @@ func TestConcurrentAccess(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create model: %v", err)
 	}
-	
+
 	// Test concurrent message processing
 	done := make(chan bool, 2)
-	
+
 	// Goroutine 1: Add log messages
 	go func() {
 		for i := 0; i < 100; i++ {
@@ -306,7 +306,7 @@ func TestConcurrentAccess(t *testing.T) {
 		}
 		done <- true
 	}()
-	
+
 	// Goroutine 2: Add metric messages
 	go func() {
 		for i := 0; i < 100; i++ {
@@ -321,23 +321,23 @@ func TestConcurrentAccess(t *testing.T) {
 		}
 		done <- true
 	}()
-	
+
 	// Wait for both goroutines to complete
 	<-done
 	<-done
-	
+
 	// Verify state
 	model.mu.RLock()
 	defer model.mu.RUnlock()
-	
+
 	if len(model.logs) != 100 {
 		t.Errorf("Expected 100 log entries, got %d", len(model.logs))
 	}
-	
+
 	if len(model.metrics) != 1 {
 		t.Errorf("Expected 1 metric (overwritten), got %d", len(model.metrics))
 	}
-	
+
 	// The last metric value should be 99
 	if metric, exists := model.metrics["test_metric"]; exists {
 		if metric.Value != 99.0 {
@@ -354,7 +354,7 @@ func TestViewModeString(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create model: %v", err)
 	}
-	
+
 	// Test different view modes
 	testCases := []struct {
 		mode     ViewMode
@@ -366,7 +366,7 @@ func TestViewModeString(t *testing.T) {
 		{ViewModeConfig, "Config"},
 		{ViewModeHelp, "Help"},
 	}
-	
+
 	for _, tc := range testCases {
 		model.viewMode = tc.mode
 		result := model.getViewModeString()
@@ -382,10 +382,10 @@ func TestStatusUpdate(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Failed to create model: %v", err)
 	}
-	
+
 	// Test that handling messages updates counts
 	initialCount := model.messageCount
-	
+
 	now := time.Now()
 	logParams := types.LogParams{
 		Message:   "Test message",
@@ -393,24 +393,24 @@ func TestStatusUpdate(t *testing.T) {
 		Timestamp: &now,
 		Component: "test-app",
 	}
-	
+
 	_ = model.HandleLog(logParams, nil)
-	
+
 	// Note: messageCount is updated in handleDataUpdate, not in Handle* methods
 	// So we can't test it directly here without triggering the full message flow
-	
+
 	// Instead, test that the data was stored
 	model.mu.RLock()
 	defer model.mu.RUnlock()
-	
+
 	if len(model.logs) != 1 {
 		t.Errorf("Expected 1 log entry, got %d", len(model.logs))
 	}
-	
+
 	// Test that last update time is reasonable
 	if time.Since(model.lastUpdate) > time.Minute {
 		t.Error("Last update time seems too old")
 	}
-	
+
 	_ = initialCount // Suppress unused variable warning
 }

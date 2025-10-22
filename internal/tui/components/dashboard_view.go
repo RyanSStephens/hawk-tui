@@ -146,9 +146,9 @@ func (dv *DashboardView) applyFilter() {
 	dv.filteredWidgets = make([]string, 0)
 
 	for id, widget := range dv.widgets {
-		if dv.filter == "" || 
-		   strings.Contains(strings.ToLower(widget.Title), strings.ToLower(dv.filter)) ||
-		   strings.Contains(strings.ToLower(id), strings.ToLower(dv.filter)) {
+		if dv.filter == "" ||
+			strings.Contains(strings.ToLower(widget.Title), strings.ToLower(dv.filter)) ||
+			strings.Contains(strings.ToLower(id), strings.ToLower(dv.filter)) {
 			dv.filteredWidgets = append(dv.filteredWidgets, id)
 		}
 	}
@@ -237,7 +237,7 @@ func (dv *DashboardView) renderWidgetGrid() string {
 				widgetID := dv.filteredWidgets[widgetIndex]
 				widget := dv.widgets[widgetID]
 				selected := widgetIndex == dv.selectedWidget
-				
+
 				renderedWidget := dv.renderWidget(widget, widgetWidth, widgetHeight, selected)
 				rowWidgets = append(rowWidgets, renderedWidget)
 			} else {
@@ -284,7 +284,7 @@ func (dv *DashboardView) renderWidget(widget types.DashboardParams, width, heigh
 	if title == "" {
 		title = widget.WidgetID
 	}
-	
+
 	titleStyle := lipgloss.NewStyle().
 		Bold(true).
 		Foreground(lipgloss.Color("#C0CAF5")).
@@ -325,21 +325,21 @@ func (dv *DashboardView) renderStatusGrid(widget types.DashboardParams, width, h
 
 	// Try to parse as StatusGridData
 	var lines []string
-	
+
 	// In a real implementation, you'd properly unmarshal the data
 	dataStr := fmt.Sprintf("%v", widget.Data)
 	if len(dataStr) > width-4 {
 		dataStr = dataStr[:width-7] + "..."
 	}
-	
+
 	lines = append(lines, "Service Status:")
 	lines = append(lines, dataStr)
 
 	content := strings.Join(lines, "\n")
-	
+
 	return lipgloss.NewStyle().
 		Width(width).
-		Height(height-1).
+		Height(height - 1).
 		Render(content)
 }
 
@@ -352,24 +352,24 @@ func (dv *DashboardView) renderGauge(widget types.DashboardParams, width, height
 	// Simple gauge representation
 	// In a real implementation, you'd parse types.GaugeData
 	value := 75.0 // Default value
-	
+
 	// Create a simple gauge bar
 	gaugeWidth := width - 2
 	if gaugeWidth < 10 {
 		gaugeWidth = 10
 	}
-	
+
 	percentage := value / 100.0
 	filled := int(percentage * float64(gaugeWidth))
 	empty := gaugeWidth - filled
-	
+
 	gauge := strings.Repeat("█", filled) + strings.Repeat("░", empty)
-	
+
 	gaugeStyle := lipgloss.NewStyle().
 		Foreground(dv.getGaugeColor(percentage))
-	
+
 	valueText := fmt.Sprintf("%.1f%%", value)
-	
+
 	return lipgloss.JoinVertical(
 		lipgloss.Center,
 		gaugeStyle.Render(gauge),
@@ -390,7 +390,7 @@ func (dv *DashboardView) renderTable(widget types.DashboardParams, width, height
 	// In a real implementation, you'd parse types.TableData
 	return lipgloss.NewStyle().
 		Width(width).
-		Height(height-1).
+		Height(height - 1).
 		Align(lipgloss.Center).
 		Render("Table Data\n(Implementation pending)")
 }
@@ -404,13 +404,13 @@ func (dv *DashboardView) renderText(widget types.DashboardParams, width, height 
 	// Simple text display
 	// In a real implementation, you'd parse types.TextData
 	content := fmt.Sprintf("%v", widget.Data)
-	
+
 	// Word wrap the content
 	wrapped := dv.wordWrap(content, width)
-	
+
 	return lipgloss.NewStyle().
 		Width(width).
-		Height(height-1).
+		Height(height - 1).
 		Render(wrapped)
 }
 
@@ -424,7 +424,7 @@ func (dv *DashboardView) renderMetricChart(widget types.DashboardParams, width, 
 	// In a real implementation, you'd parse types.ChartData and render actual charts
 	return lipgloss.NewStyle().
 		Width(width).
-		Height(height-1).
+		Height(height - 1).
 		Align(lipgloss.Center).
 		Render("Chart Data\n(Implementation pending)")
 }
@@ -432,10 +432,10 @@ func (dv *DashboardView) renderMetricChart(widget types.DashboardParams, width, 
 // renderUnsupportedWidget renders an unsupported widget type
 func (dv *DashboardView) renderUnsupportedWidget(widget types.DashboardParams, width, height int) string {
 	message := fmt.Sprintf("Unsupported widget type:\n%s", widget.Type)
-	
+
 	return lipgloss.NewStyle().
 		Width(width).
-		Height(height-1).
+		Height(height - 1).
 		Foreground(lipgloss.Color("#FF6B6B")).
 		Align(lipgloss.Center).
 		Render(message)
@@ -445,7 +445,7 @@ func (dv *DashboardView) renderUnsupportedWidget(widget types.DashboardParams, w
 func (dv *DashboardView) renderNoData(width, height int) string {
 	return lipgloss.NewStyle().
 		Width(width).
-		Height(height-1).
+		Height(height - 1).
 		Foreground(lipgloss.Color("#565F89")).
 		Italic(true).
 		Align(lipgloss.Center).
@@ -456,15 +456,15 @@ func (dv *DashboardView) renderNoData(width, height int) string {
 func (dv *DashboardView) renderHeader(title string) string {
 	var parts []string
 	parts = append(parts, title)
-	
+
 	if dv.filter != "" {
 		parts = append(parts, fmt.Sprintf("(Filter: %s)", dv.filter))
 	}
-	
+
 	parts = append(parts, fmt.Sprintf("(%d widgets)", len(dv.filteredWidgets)))
-	
+
 	headerText := strings.Join(parts, " ")
-	
+
 	return lipgloss.NewStyle().
 		Background(lipgloss.Color("#24283B")).
 		Foreground(lipgloss.Color("#C0CAF5")).
@@ -483,7 +483,7 @@ func (dv *DashboardView) renderControls() string {
 		"g Grid",
 		"r Refresh",
 	}
-	
+
 	return lipgloss.NewStyle().
 		Foreground(lipgloss.Color("#565F89")).
 		Render(strings.Join(controls, " │ "))

@@ -99,10 +99,10 @@ func main() {
 
 	// Add chart widget
 	chartData := map[string]float64{
-		"API":      234,
-		"Web":      189,
-		"Mobile":   156,
-		"Desktop":  98,
+		"API":     234,
+		"Web":     189,
+		"Mobile":  156,
+		"Desktop": 98,
 	}
 	dashboard.AddWidget(templates.CreateChartWidget(
 		"Requests by Platform",

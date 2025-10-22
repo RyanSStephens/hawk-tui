@@ -50,17 +50,17 @@ type Model struct {
 	activePanel int
 
 	// Components
-	logViewer    *components.LogViewer
-	metricsView  *components.MetricsView
+	logViewer     *components.LogViewer
+	metricsView   *components.MetricsView
 	dashboardView *components.DashboardView
-	configView   *components.ConfigView
-	helpView     *components.HelpView
-	statusBar    *components.StatusBar
+	configView    *components.ConfigView
+	helpView      *components.HelpView
+	statusBar     *components.StatusBar
 
 	// Protocol handling
 	protocolHandler *protocol.ProtocolHandler
 	responseWriter  io.Writer
-	
+
 	// Data storage
 	logs     []types.LogParams
 	metrics  map[string]types.MetricParams
@@ -68,36 +68,36 @@ type Model struct {
 	progress map[string]types.ProgressParams
 	widgets  map[string]types.DashboardParams
 	events   []types.EventParams
-	
+
 	// State management
-	mu       sync.RWMutex
-	lastUpdate time.Time
+	mu           sync.RWMutex
+	lastUpdate   time.Time
 	messageCount int64
 	errorCount   int64
 
 	// Input handling
 	inputMode   bool
 	searchQuery string
-	
+
 	// Performance tracking
-	frameCount   int64
-	lastFPSTime  time.Time
-	currentFPS   float64
+	frameCount  int64
+	lastFPSTime time.Time
+	currentFPS  float64
 }
 
 // NewModel creates a new TUI model
 func NewModel(config Config) (*Model, error) {
 	m := &Model{
-		config:    config,
-		styles:    NewStyles(),
-		viewMode:  ViewModeLogs,
-		logs:      make([]types.LogParams, 0),
-		metrics:   make(map[string]types.MetricParams),
-		configs:   make(map[string]types.ConfigParams),
-		progress:  make(map[string]types.ProgressParams),
-		widgets:   make(map[string]types.DashboardParams),
-		events:    make([]types.EventParams, 0),
-		lastUpdate: time.Now(),
+		config:      config,
+		styles:      NewStyles(),
+		viewMode:    ViewModeLogs,
+		logs:        make([]types.LogParams, 0),
+		metrics:     make(map[string]types.MetricParams),
+		configs:     make(map[string]types.ConfigParams),
+		progress:    make(map[string]types.ProgressParams),
+		widgets:     make(map[string]types.DashboardParams),
+		events:      make([]types.EventParams, 0),
+		lastUpdate:  time.Now(),
 		lastFPSTime: time.Now(),
 	}
 
@@ -150,10 +150,10 @@ func (m *Model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		m.width = msg.Width
 		m.height = msg.Height
 		m.ready = true
-		
+
 		// Update component sizes
 		m.updateComponentSizes()
-		
+
 		return m, nil
 
 	case tea.KeyMsg:
@@ -481,7 +481,7 @@ func (m *Model) applySearch() {
 func (m *Model) updateFPS() {
 	m.frameCount++
 	now := time.Now()
-	
+
 	if now.Sub(m.lastFPSTime) >= time.Second {
 		m.currentFPS = float64(m.frameCount) / now.Sub(m.lastFPSTime).Seconds()
 		m.frameCount = 0
