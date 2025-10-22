@@ -1,433 +1,272 @@
-# 🦅 Hawk TUI
+# 🦅 HawkTUI
 
-**Transform any command-line application into a beautiful, interactive TUI in minutes.**
+**A comprehensive Terminal UI toolkit for building beautiful, interactive terminal applications in Go.**
 
 [![Go Version](https://img.shields.io/badge/Go-1.21+-00ADD8?style=flat&logo=go)](https://golang.org)
 [![License](https://img.shields.io/badge/License-AGPL--3.0-blue.svg)](LICENSE)
 [![PRs Welcome](https://img.shields.io/badge/PRs-welcome-brightgreen.svg)](CONTRIBUTING.md)
 
-![Hawk TUI Demo](docs/demo.gif)
+## What is HawkTUI?
 
-## What is Hawk TUI?
-
-Hawk TUI is a **universal TUI framework** that can transform any application in any programming language into a rich, interactive terminal interface. Whether you're monitoring a web server, running database migrations, or training ML models, Hawk TUI provides instant visualization with **zero architectural changes** to your existing code.
-
-## Quick Start (< 5 minutes)
-
-### 1. Install Hawk TUI
-```bash
-# macOS/Linux - Easy one-liner
-curl -sSL https://raw.githubusercontent.com/hawk-tui/hawk-tui/main/scripts/install.sh | bash
-
-# Windows - PowerShell
-iwr -useb https://raw.githubusercontent.com/hawk-tui/hawk-tui/main/scripts/install.ps1 | iex
-
-# Or build from source
-git clone https://github.com/hawk-tui/hawk-tui.git
-cd hawk-tui
-make build
-```
-
-### 2. Add to Your Application
-```python
-# Python - Zero configuration
-import hawk
-hawk.auto()  # One line - that's it!
-
-# Your existing code works unchanged
-print("Server starting...")  # Appears in TUI
-logger.info("Database connected")  # Automatically captured
-```
-
-```javascript
-// Node.js - Equally simple
-const hawk = require('hawk-tui');
-hawk.auto();
-
-// All your console.log and logging works as normal
-console.log('Server starting...');
-logger.info('Database connected');
-```
-
-### 3. Run with TUI
-```bash
-python your_app.py | hawk
-```
-
-**That's it!** Your application now has a beautiful TUI interface.
-
-## Core Philosophy
-
-### Drop-in Integration
-- **One line of code** to get started
-- **Zero dependencies** for host applications  
-- **Works with existing logging/metrics**
-- **Never breaks your application**
-
-### Universal Language Support
-```python
-# Python
-import hawk; hawk.auto()
-```
-```javascript
-// Node.js  
-require('hawk-tui').auto();
-```
-```go
-// Go
-import _ "github.com/hawk-tui/go-client/auto"
-```
-```rust
-// Rust
-use hawk::auto;
-```
-
-### Enterprise Ready
-- **Security & Compliance**: Local-only communication, audit trails
-- **Scale & Performance**: Multi-instance support, resource limits
-- **Remote Monitoring**: Secure tunneling for production environments
-
-## Architecture
-
-```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   Your App      │    │   Hawk TUI      │    │   Language      │
-│   (Any Lang)    │◄──►│   (Go Binary)   │◄──►│   Client        │
-│                 │    │                 │    │   (Thin Library)│
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-     JSON over             Bubble Tea           Python/Node/Go
-     stdin/stdout          Renderer            Rust/Java/etc
-```
-
-- **Universal Protocol**: JSON-RPC over stdin/stdout works with any language
-- **High Performance**: 60 FPS updates, 100K+ messages/second throughput
-- **Zero Dependencies**: Host applications don't install TUI libraries
-- **Extensible**: Plugin system for custom widgets and integrations
+HawkTUI is a batteries-included UI toolkit for Go terminal applications, combining the best features of [lipgloss](https://github.com/charmbracelet/lipgloss), [bubbletea](https://github.com/charmbracelet/bubbletea), and [log](https://github.com/charmbracelet/log) into one cohesive package with ready-to-use templates.
 
 ## Features
 
-### Real-time Monitoring
-- **Live Metrics**: Counters, gauges, histograms with auto-scaling charts
-- **Intelligent Logging**: Filtering, search, context-aware display
-- **Interactive Dashboards**: Customizable widgets and layouts
-- **Configuration Management**: Live parameter editing with validation
+### 🎨 **Theme System**
+- 5 built-in themes (Dark, Light, Nord, Dracula, Catppuccin)
+- Full color customization
+- Consistent styling across components
 
-### Developer Experience
-- **Vim-like Navigation**: Intuitive keyboard shortcuts
-- **Beautiful Themes**: Professional dark/light themes
-- **Smart Search**: Filter logs, metrics, and configuration
-- **Responsive Design**: Adapts to any terminal size
+### 🧩 **Rich Component Library**
+- **Button** - Multiple styles (Primary, Secondary, Success, Warning, Error, Ghost)
+- **Input** - With validation, password masking, and callbacks
+- **Table** - Selectable rows, auto-sizing, keyboard navigation
+- **List** - Filterable with search and descriptions
+- **ProgressBar** - Customizable with labels and percentages
+- **Spinner** - 5 animation styles
+- **Panel** - Bordered containers with titles
+- **Tabs** - Tabbed interface with keyboard navigation
 
-### Production Ready
-- **Security**: Input validation, resource limits, audit logging
-- **Performance**: Memory efficient, graceful degradation
-- **Monitoring**: Built-in performance metrics and health checks
-- **Remote Access**: Secure tunneling for production monitoring
+### 📐 **Flexible Layouts**
+- Horizontal & Vertical layouts
+- Grid layout (n columns)
+- Flexbox-style layouts
+- Container with alignment and spacing
+
+### 📝 **Structured Logger**
+- 5 log levels (Debug, Info, Warn, Error, Success)
+- Styled output with theme colors
+- Entry history tracking
+
+### 📦 **Pre-built Templates**
+- **Dashboard** - Multi-widget grid layout
+- **Form** - Field management with validation
+- **ListView** - Search bar and action buttons
+- **SplitView** - Horizontal/vertical split panes
+
+## Quick Start
+
+### Installation
+
+\`\`\`bash
+go get github.com/hawk-tui/hawk-tui/pkg/hawktui
+\`\`\`
+
+### Basic Example
+
+\`\`\`go
+package main
+
+import (
+    tea "github.com/charmbracelet/bubbletea"
+    "github.com/hawk-tui/hawk-tui/pkg/hawktui"
+    "github.com/hawk-tui/hawk-tui/pkg/hawktui/components"
+)
+
+type model struct {
+    app    *hawktui.App
+    button *components.Button
+}
+
+func (m model) Init() tea.Cmd { return nil }
+
+func (m model) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+    switch msg := msg.(type) {
+    case tea.KeyMsg:
+        if msg.String() == "q" {
+            return m, tea.Quit
+        }
+    }
+
+    btnModel, cmd := m.button.Update(msg)
+    m.button = btnModel.(*components.Button)
+    return m, cmd
+}
+
+func (m model) View() string {
+    return m.button.View()
+}
+
+func main() {
+    app := hawktui.New(hawktui.WithTheme(hawktui.ThemeDark()))
+
+    button := hawktui.NewButton("Click Me!", func() {
+        app.Logger().Success("Button clicked!")
+    })
+    button.SetTheme(app.Theme())
+    button.SetFocused(true)
+
+    m := model{app: app, button: button}
+    p := tea.NewProgram(m, tea.WithAltScreen())
+    p.Run()
+}
+\`\`\`
 
 ## Examples
 
-### Web Server Monitoring
-```python
-from flask import Flask
-import hawk
+The \`examples/hawktui/\` directory contains complete examples:
 
-app = Flask(__name__)
-tui = hawk.TUI("E-commerce API")
+\`\`\`bash
+# Simple component demo
+go run examples/hawktui/simple_demo.go
 
-@app.route('/api/products')
-def get_products():
-    with hawk.context("Database Query"):
-        products = db.query("SELECT * FROM products")
-        hawk.metric("db_query_time", timer.elapsed())
-        hawk.log(f"Retrieved {len(products)} products")
-        return products
+# Dashboard with metrics
+go run examples/hawktui/dashboard_demo.go
 
-if __name__ == '__main__':
-    app.run()
-```
+# Form with validation
+go run examples/hawktui/form_demo.go
 
-### Database Migration
-```python
-import hawk
+# List view with search
+go run examples/hawktui/list_demo.go
+\`\`\`
 
-tui = hawk.TUI("Database Migration")
+## Components
 
-def migrate_table(table_name, total_records):
-    progress = hawk.progress(f"Migrating {table_name}", total=total_records)
-    
-    for i, record in enumerate(get_records(table_name)):
-        migrate_record(record)
-        progress.update(i + 1)
-        
-        if i % 100 == 0:
-            hawk.log(f"Migrated {i+1}/{total_records} records")
-    
-    hawk.log(f"Completed {table_name}", level="SUCCESS")
-```
+### Button
 
-### Machine Learning Training
-```python
-import hawk
+\`\`\`go
+button := hawktui.NewButton("Submit", func() {
+    // Handle click
+})
+button.SetStyle(components.ButtonStylePrimary)
+button.SetFocused(true)
+\`\`\`
 
-monitor = hawk.TUI("ResNet Training")
-dashboard = monitor.dashboard("Training Metrics")
+### Input
 
-for epoch in range(100):
-    for batch_idx, (data, targets) in enumerate(dataloader):
-        loss = train_step(data, targets)
-        
-        hawk.metric("batch_loss", loss.item())
-        hawk.metric("learning_rate", optimizer.lr)
-        
-        if batch_idx % 10 == 0:
-            hawk.log(f"Epoch {epoch}, Batch {batch_idx}: Loss = {loss:.4f}")
-```
+\`\`\`go
+input := hawktui.NewInput("Enter your name...")
+input.SetMaxLength(50)
+input.SetOnChange(func(value string) {
+    // Handle change
+})
 
-## Use Cases
+// Password input
+input.SetMasked(true)
 
-### Web Development
-- API endpoint monitoring and performance tracking
-- Database query analysis and optimization
-- Request/response logging with filtering
-- Configuration hot-reloading and validation
+// With validation
+input.SetValidator(func(value string) bool {
+    return len(value) >= 3
+})
+\`\`\`
 
-### DevOps & Infrastructure  
-- Container orchestration dashboards
-- Log aggregation and real-time analysis
-- Metrics collection and alerting interfaces
-- CI/CD pipeline visualization and control
+### Table
 
-### Data Processing
-- ETL pipeline monitoring and control
-- Data quality dashboards and validation
-- Processing job status and progress tracking
-- Performance profiling and optimization
+\`\`\`go
+table := hawktui.NewTable([]string{"Name", "Age", "Email"})
+table.SetRows([][]string{
+    {"Alice", "30", "alice@example.com"},
+    {"Bob", "25", "bob@example.com"},
+})
+table.SetOnSelect(func(row int) {
+    // Handle selection
+})
+\`\`\`
 
-### Game Development
-- Asset loading progress and performance
-- Debug console with live parameter tweaking
-- Performance metrics and frame rate analysis
-- Live configuration and gameplay tuning
+### Dashboard Template
 
-## Language Support
+\`\`\`go
+dashboard := hawktui.NewDashboard()
+dashboard.SetTitle("System Dashboard")
+dashboard.SetColumns(3)
 
-| Language | Status | Installation | Example |
-|----------|--------|--------------|---------|
-| **Python** | ✅ Ready | `pip install hawk-tui` | [Demo](examples/python/demo.py) |
-| **Node.js** | ✅ Ready | `npm install hawk-tui` | [Demo](examples/nodejs/demo.js) |
-| **Go** | 🚧 In Progress | `go get hawk-tui/client` | [Demo](examples/go/demo.go) |
-| **Rust** | 📋 Planned | `cargo add hawk-tui` | Coming Soon |
-| **Java** | 📋 Planned | Maven/Gradle | Coming Soon |
+dashboard.AddWidget(templates.CreateMetricWidget(
+    "CPU Usage", "45%", "8 cores", theme,
+))
 
-## Getting Started
+dashboard.AddWidget(templates.CreateStatusWidget(
+    "Server", "healthy", "All systems operational", theme,
+))
+\`\`\`
 
-### Installation Options
+## Documentation
 
-#### Option 1: Install Script (Recommended)
-```bash
-# Linux/macOS
-curl -sSL https://raw.githubusercontent.com/hawk-tui/hawk-tui/main/scripts/install.sh | bash
+- [HawkTUI Toolkit README](pkg/hawktui/README.md) - Complete toolkit documentation
+- [API Design](API_DESIGN.md) - Protocol and architecture design
+- [Contributing Guide](CONTRIBUTING.md) - How to contribute
 
-# Windows (PowerShell)
-iwr -useb https://raw.githubusercontent.com/hawk-tui/hawk-tui/main/scripts/install.ps1 | iex
-```
+## Project Structure
 
-#### Option 2: Package Managers
-```bash
-# Homebrew (macOS/Linux)
-brew install hawk-tui/tap/hawk-tui
+\`\`\`
+hawk-tui/
+├── pkg/hawktui/          # Main UI toolkit package
+│   ├── components/       # UI components
+│   ├── layouts/          # Layout helpers
+│   ├── logger/           # Styled logging
+│   ├── styles/           # Theme system
+│   └── templates/        # Pre-built templates
+├── examples/
+│   ├── hawktui/          # Toolkit examples
+│   ├── go/               # Go protocol examples
+│   ├── python/           # Python client examples
+│   └── nodejs/           # Node.js client examples
+├── internal/             # Internal TUI components
+├── cmd/                  # Command-line applications
+└── docs/                 # Documentation
+\`\`\`
 
-# Docker
-docker run -it --rm hawktui/hawk-tui:latest
+## Building
 
-# NPM (Global)
-npm install -g hawk-tui
+### Build the Examples
 
-# Python (PyPI)
-pip install hawk-tui
-```
+\`\`\`bash
+# Build all HawkTUI examples
+go build -o bin/simple_demo examples/hawktui/simple_demo.go
+go build -o bin/dashboard_demo examples/hawktui/dashboard_demo.go
+go build -o bin/form_demo examples/hawktui/form_demo.go
+go build -o bin/list_demo examples/hawktui/list_demo.go
+\`\`\`
 
-#### Option 3: Download Binary
-```bash
-# Download latest release for your platform
-wget https://github.com/hawk-tui/hawk-tui/releases/latest/download/hawk-tui-linux-amd64.tar.gz
-tar -xzf hawk-tui-linux-amd64.tar.gz
-sudo mv hawk /usr/local/bin/
-```
+### Using Docker
 
-#### Option 4: Build from Source
-```bash
-git clone https://github.com/hawk-tui/hawk-tui.git
-cd hawk-tui
-make build
-sudo make install
-```
+\`\`\`bash
+# Build Docker image
+docker build -t hawktui .
 
-### Basic Usage
+# Run an example
+docker run -it hawktui
+\`\`\`
 
-#### Magic Mode (Zero Configuration)
-```python
-import hawk
-hawk.auto()  # Automatically detects logs, metrics, configs
+## Testing
 
-# Your existing application code
-logger.info("Server started")
-metrics.counter("requests").inc()
-config_value = os.getenv("PORT", 8080)
-```
+\`\`\`bash
+# Run all tests
+go test ./...
 
-#### Structured Integration
-```python
-import hawk
+# Run tests with coverage
+go test -cover ./...
 
-# Setup application monitoring
-tui = hawk.TUI("My Application")
-dashboard = tui.dashboard("Overview")
-
-# Add metrics and monitoring
-dashboard.add_metric("Requests/sec", get_request_rate)
-dashboard.add_chart("Response Times", get_response_times)
-dashboard.add_table("Active Users", get_active_users)
-
-# Configuration management
-config = tui.config_panel("Settings")
-config.add_field("port", type="int", default=8080)
-config.add_field("debug", type="bool", default=False)
-```
-
-#### Running Your Application
-```bash
-# Basic usage
-python your_app.py | hawk
-
-# With configuration
-python your_app.py | hawk --theme dark --refresh-rate 500ms
-
-# Remote monitoring
-python your_app.py | hawk --remote --port 9090
-```
-
-## Advanced Features
-
-### Dashboard Creation
-```python
-dashboard = hawk.dashboard("System Overview")
-
-# Add various widget types
-dashboard.add_metric("CPU Usage", get_cpu_usage, format="{:.1f}%")
-dashboard.add_gauge("Memory", get_memory_usage, max_value=100)
-dashboard.add_chart("Network I/O", get_network_stats, chart_type="line")
-dashboard.add_table("Processes", get_top_processes, columns=["PID", "Name", "CPU"])
-dashboard.add_status("Services", get_service_status)
-```
-
-### Configuration Management
-```python
-config = hawk.config_panel("Database Settings")
-config.add_field("host", type="string", required=True, default="localhost")
-config.add_field("port", type="int", min=1, max=65535, default=5432)
-config.add_field("ssl_mode", type="enum", options=["disable", "require", "verify-full"])
-
-# React to configuration changes
-@config.on_change("host")
-def reconnect_database(new_host):
-    db.reconnect(host=new_host)
-```
-
-### Performance Monitoring
-```python
-# Decorators for automatic monitoring
-@hawk.monitor
-@hawk.timed("api_request")
-def handle_request(request):
-    return process_request(request)
-
-# Context managers for sections
-with hawk.context("Database Migration"):
-    with hawk.context("Table: users"):
-        migrate_users_table()
-```
-
-## Configuration
-
-### Environment Variables
-```bash
-export HAWK_APP_NAME="My Application"
-export HAWK_THEME="dark"
-export HAWK_REFRESH_RATE="1000ms"
-export HAWK_AUTO_DETECT="logs,metrics,config"
-```
-
-### Configuration File (`hawk.yml`)
-```yaml
-app_name: "My Application"
-theme: "dark"
-refresh_rate: 1000ms
-
-auto_detect:
-  logs: true
-  metrics: true
-  configs: true
-
-dashboard:
-  widgets: ["logs", "metrics", "status"]
-  layout: "vertical"
-
-security:
-  enable_audit_log: true
-  max_message_rate: 1000
-```
-
-## Contributing
-
-We welcome contributions! Please see our [Contributing Guide](CONTRIBUTING.md) for details.
-
-### Development Setup
-```bash
-git clone https://github.com/hawk-tui/hawk-tui.git
-cd hawk-tui
-make dev  # Sets up development environment
-make build  # Build the binary
-```
-
-### Running Tests
-```bash
-make test  # Run all tests (Go, Node.js, Python)
-make test-go  # Go tests only
-make test-nodejs  # Node.js client tests
-make test-python  # Python client tests
-```
-
-### Build and Package
-```bash
-make build-all  # Build for all platforms
-make package  # Create distribution packages
-make release  # Full release pipeline
-```
+# Run tests for the HawkTUI package
+go test ./pkg/hawktui/...
+\`\`\`
 
 ## License
 
-Hawk TUI is dual-licensed under AGPL-3.0 and commercial licenses:
+HawkTUI is dual-licensed under:
 
 - **AGPL-3.0**: Free for open source and personal use
 - **Commercial License**: Required for proprietary/commercial use
 
-See [LICENSE](LICENSE) file for details. For commercial licensing inquiries, contact: license@hawktui.dev
+See [LICENSE](LICENSE) file for details.
 
-## Star History
+## Acknowledgments
 
-[![Star History Chart](https://api.star-history.com/svg?repos=hawk-tui/hawk-tui&type=Date)](https://star-history.com/#hawk-tui/hawk-tui&Date)
+HawkTUI is inspired by the excellent work of Charmbracelet:
+- [lipgloss](https://github.com/charmbracelet/lipgloss) - Terminal styling
+- [bubbletea](https://github.com/charmbracelet/bubbletea) - TUI framework
+- [bubbles](https://github.com/charmbracelet/bubbles) - TUI components
+- [log](https://github.com/charmbracelet/log) - Structured logging
+
+## Contributing
+
+Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
 
 ## Links
 
-- **GitHub**: https://github.com/hawk-tui/hawk-tui
-- **Documentation**: https://github.com/hawk-tui/hawk-tui/blob/main/docs/
-- **Examples**: [examples/](examples/)
-- **Contributing**: [CONTRIBUTING.md](CONTRIBUTING.md)
-- **Issues**: https://github.com/hawk-tui/hawk-tui/issues
+- **Documentation**: [pkg/hawktui/README.md](pkg/hawktui/README.md)
+- **Examples**: [examples/hawktui/](examples/hawktui/)
+- **Issues**: https://github.com/RyanSStephens/hawk-tui/issues
 
 ---
 
-**Made with care by developers, for developers.**
-
-*Transform your CLI tools into beautiful, interactive experiences.*
+**Transform your CLI tools into beautiful, interactive experiences.**

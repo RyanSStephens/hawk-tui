@@ -18,6 +18,7 @@ func main() {
 		LogLevel: "debug",
 		Debug:    true,
 	}
+	_ = config // Used later in unreachable code section
 
 	// Create model (this will fail due to protocol handler, but we can test other parts)
 	fmt.Println("✓ Configuration created successfully")

@@ -95,16 +95,16 @@ const (
 
 // ConfigParams represents parameters for hawk.config method
 type ConfigParams struct {
-	Key              string        `json:"key"`
-	Value            interface{}   `json:"value,omitempty"`
-	Type             ConfigType    `json:"type,omitempty"`
-	Description      string        `json:"description,omitempty"`
-	Default          interface{}   `json:"default,omitempty"`
-	Min              *float64      `json:"min,omitempty"`
-	Max              *float64      `json:"max,omitempty"`
-	Options          []interface{} `json:"options,omitempty"`
-	RestartRequired  bool          `json:"restart_required,omitempty"`
-	Category         string        `json:"category,omitempty"`
+	Key             string        `json:"key"`
+	Value           interface{}   `json:"value,omitempty"`
+	Type            ConfigType    `json:"type,omitempty"`
+	Description     string        `json:"description,omitempty"`
+	Default         interface{}   `json:"default,omitempty"`
+	Min             *float64      `json:"min,omitempty"`
+	Max             *float64      `json:"max,omitempty"`
+	Options         []interface{} `json:"options,omitempty"`
+	RestartRequired bool          `json:"restart_required,omitempty"`
+	Category        string        `json:"category,omitempty"`
 }
 
 // ProgressStatus represents the status of a progress operation
@@ -119,14 +119,14 @@ const (
 
 // ProgressParams represents parameters for hawk.progress method
 type ProgressParams struct {
-	ID                   string         `json:"id"`
-	Label                string         `json:"label"`
-	Current              float64        `json:"current"`
-	Total                float64        `json:"total"`
-	Unit                 string         `json:"unit,omitempty"`
-	Status               ProgressStatus `json:"status,omitempty"`
-	Details              string         `json:"details,omitempty"`
-	EstimatedCompletion  *time.Time     `json:"estimated_completion,omitempty"`
+	ID                  string         `json:"id"`
+	Label               string         `json:"label"`
+	Current             float64        `json:"current"`
+	Total               float64        `json:"total"`
+	Unit                string         `json:"unit,omitempty"`
+	Status              ProgressStatus `json:"status,omitempty"`
+	Details             string         `json:"details,omitempty"`
+	EstimatedCompletion *time.Time     `json:"estimated_completion,omitempty"`
 }
 
 // WidgetType represents the type of dashboard widget
@@ -224,9 +224,9 @@ type StatusGridItem struct {
 
 // TableData represents data for a table widget
 type TableData struct {
-	Headers []string                   `json:"headers"`
-	Rows    [][]interface{}            `json:"rows"`
-	Config  map[string]interface{}     `json:"config,omitempty"`
+	Headers []string               `json:"headers"`
+	Rows    [][]interface{}        `json:"rows"`
+	Config  map[string]interface{} `json:"config,omitempty"`
 }
 
 // ChartData represents data for chart widgets
@@ -237,10 +237,10 @@ type ChartData struct {
 
 // ChartSeries represents a single data series in a chart
 type ChartSeries struct {
-	Name   string      `json:"name"`
-	Data   []ChartPoint `json:"data"`
-	Color  string      `json:"color,omitempty"`
-	Type   string      `json:"type,omitempty"` // line, bar, area, etc.
+	Name  string       `json:"name"`
+	Data  []ChartPoint `json:"data"`
+	Color string       `json:"color,omitempty"`
+	Type  string       `json:"type,omitempty"` // line, bar, area, etc.
 }
 
 // ChartPoint represents a single data point in a chart series
@@ -251,11 +251,11 @@ type ChartPoint struct {
 
 // GaugeData represents data for gauge widgets
 type GaugeData struct {
-	Value    float64 `json:"value"`
-	Min      float64 `json:"min"`
-	Max      float64 `json:"max"`
-	Unit     string  `json:"unit,omitempty"`
-	Zones    []GaugeZone `json:"zones,omitempty"`
+	Value float64     `json:"value"`
+	Min   float64     `json:"min"`
+	Max   float64     `json:"max"`
+	Unit  string      `json:"unit,omitempty"`
+	Zones []GaugeZone `json:"zones,omitempty"`
 }
 
 // GaugeZone represents a colored zone in a gauge
@@ -294,9 +294,9 @@ const (
 	InternalErrorCode  = -32603
 
 	// Custom Hawk error codes
-	HawkInvalidMessageType = -32000
-	HawkInvalidData        = -32001
-	HawkResourceLimit      = -32002
+	HawkInvalidMessageType  = -32000
+	HawkInvalidData         = -32001
+	HawkResourceLimit       = -32002
 	HawkAuthenticationError = -32003
 )
 

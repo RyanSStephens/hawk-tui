@@ -109,10 +109,10 @@ func (sb *StatusBar) RemoveProgress(id string) {
 func (sb *StatusBar) renderStatusLine() string {
 	// Left section: view mode and input status
 	leftSection := sb.renderLeftSection()
-	
+
 	// Center section: message counts and performance
 	centerSection := sb.renderCenterSection()
-	
+
 	// Right section: time and system info
 	rightSection := sb.renderRightSection()
 
@@ -120,10 +120,10 @@ func (sb *StatusBar) renderStatusLine() string {
 	leftWidth := lipgloss.Width(leftSection)
 	centerWidth := lipgloss.Width(centerSection)
 	rightWidth := lipgloss.Width(rightSection)
-	
+
 	totalContentWidth := leftWidth + centerWidth + rightWidth
 	availableSpace := sb.width - totalContentWidth
-	
+
 	var spacing string
 	if availableSpace > 0 {
 		leftSpacing := availableSpace / 2
@@ -161,7 +161,7 @@ func (sb *StatusBar) renderLeftSection() string {
 			Foreground(lipgloss.Color("#1A1B26")).
 			Padding(0, 1).
 			Bold(true)
-		
+
 		searchText := "SEARCH"
 		if sb.status.SearchQuery != "" {
 			searchText = fmt.Sprintf("SEARCH: %s", sb.status.SearchQuery)
@@ -262,12 +262,12 @@ func (sb *StatusBar) renderProgressBar(progress types.ProgressParams) string {
 	if progress.Total == 0 {
 		percentage = 0
 	}
-	
+
 	percentText := fmt.Sprintf("%.1f%%", percentage)
 	if progress.Unit != "" && progress.Unit != "%" {
 		percentText = fmt.Sprintf("%.0f/%0.f %s", progress.Current, progress.Total, progress.Unit)
 	}
-	
+
 	percentStyle := lipgloss.NewStyle().
 		Width(percentWidth).
 		Align(lipgloss.Right).
@@ -278,7 +278,7 @@ func (sb *StatusBar) renderProgressBar(progress types.ProgressParams) string {
 	if filled > progressBarWidth {
 		filled = progressBarWidth
 	}
-	
+
 	bar := strings.Repeat("█", filled) + strings.Repeat("░", progressBarWidth-filled)
 	barStyle := lipgloss.NewStyle().
 		Foreground(sb.getProgressColor(progress.Status))
@@ -324,31 +324,14 @@ func (sb *StatusBar) getProgressColor(status types.ProgressStatus) lipgloss.Colo
 	}
 }
 
-// renderHelpLine renders keyboard shortcuts help
-func (sb *StatusBar) renderHelpLine() string {
-	shortcuts := []string{
-		"q Quit",
-		"h Help",
-		"1-4 Views",
-		"/ Search",
-		"Tab Navigate",
-	}
-
-	helpStyle := lipgloss.NewStyle().
-		Foreground(lipgloss.Color("#565F89")).
-		Italic(true)
-
-	return helpStyle.Render(strings.Join(shortcuts, " │ "))
-}
-
 // GetHeight returns the current height needed for the status bar
 func (sb *StatusBar) GetHeight() int {
 	height := 1 // Base status line
-	
+
 	// Add height for progress bars
 	if len(sb.progressItems) > 0 {
 		height += len(sb.progressItems)
 	}
-	
+
 	return height
 }

@@ -39,15 +39,15 @@ var (
 // Styles defines all the visual styles used in the TUI
 type Styles struct {
 	// Base styles
-	Base        lipgloss.Style
-	Focused     lipgloss.Style
-	Blurred     lipgloss.Style
-	Selected    lipgloss.Style
-	Error       lipgloss.Style
-	Warning     lipgloss.Style
-	Success     lipgloss.Style
-	Info        lipgloss.Style
-	Debug       lipgloss.Style
+	Base     lipgloss.Style
+	Focused  lipgloss.Style
+	Blurred  lipgloss.Style
+	Selected lipgloss.Style
+	Error    lipgloss.Style
+	Warning  lipgloss.Style
+	Success  lipgloss.Style
+	Info     lipgloss.Style
+	Debug    lipgloss.Style
 
 	// Layout styles
 	Container   lipgloss.Style
@@ -59,13 +59,13 @@ type Styles struct {
 	Content     lipgloss.Style
 
 	// Component styles
-	Tab         lipgloss.Style
-	TabActive   lipgloss.Style
-	TabInactive lipgloss.Style
-	Button      lipgloss.Style
+	Tab          lipgloss.Style
+	TabActive    lipgloss.Style
+	TabInactive  lipgloss.Style
+	Button       lipgloss.Style
 	ButtonActive lipgloss.Style
-	Input       lipgloss.Style
-	InputActive lipgloss.Style
+	Input        lipgloss.Style
+	InputActive  lipgloss.Style
 
 	// Log styles
 	LogEntry     lipgloss.Style
@@ -75,12 +75,12 @@ type Styles struct {
 	LogContext   lipgloss.Style
 
 	// Metric styles
-	MetricCard   lipgloss.Style
-	MetricValue  lipgloss.Style
-	MetricLabel  lipgloss.Style
-	MetricUnit   lipgloss.Style
-	GaugeBar     lipgloss.Style
-	GaugeFill    lipgloss.Style
+	MetricCard  lipgloss.Style
+	MetricValue lipgloss.Style
+	MetricLabel lipgloss.Style
+	MetricUnit  lipgloss.Style
+	GaugeBar    lipgloss.Style
+	GaugeFill   lipgloss.Style
 
 	// Dashboard styles
 	Widget       lipgloss.Style
@@ -405,7 +405,7 @@ func GetMetricColor(value, min, max float64) lipgloss.Color {
 	}
 
 	ratio := (value - min) / (max - min)
-	
+
 	switch {
 	case ratio >= 0.8:
 		return ColorError
@@ -459,6 +459,6 @@ func Center(text string, width int) string {
 	}
 	padding := (width - len(text)) / 2
 	leftPad := lipgloss.NewStyle().Width(padding).Render("")
-	rightPad := lipgloss.NewStyle().Width(width-len(text)-padding).Render("")
+	rightPad := lipgloss.NewStyle().Width(width - len(text) - padding).Render("")
 	return leftPad + text + rightPad
 }
