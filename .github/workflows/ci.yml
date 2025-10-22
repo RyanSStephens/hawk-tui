@@ -38,6 +38,7 @@ jobs:
       run: go mod download
 
     - name: Run tests
+      shell: bash
       run: go test -v -coverprofile=coverage.out ./pkg/... ./internal/...
 
     - name: Build examples (Linux/macOS)
@@ -51,13 +52,13 @@ jobs:
 
     - name: Build examples (Windows)
       if: runner.os == 'Windows'
-      shell: pwsh
+      shell: bash
       run: |
-        if (-not (Test-Path bin)) { New-Item -ItemType Directory -Path bin | Out-Null }
-        go build -o bin\simple_demo.exe examples\hawktui\simple_demo.go
-        go build -o bin\dashboard_demo.exe examples\hawktui\dashboard_demo.go
-        go build -o bin\form_demo.exe examples\hawktui\form_demo.go
-        go build -o bin\list_demo.exe examples\hawktui\list_demo.go
+        mkdir -p bin
+        go build -o bin/simple_demo.exe examples/hawktui/simple_demo.go
+        go build -o bin/dashboard_demo.exe examples/hawktui/dashboard_demo.go
+        go build -o bin/form_demo.exe examples/hawktui/form_demo.go
+        go build -o bin/list_demo.exe examples/hawktui/list_demo.go
 
     - name: Upload coverage reports
       if: matrix.os == 'ubuntu-latest'
