@@ -58,6 +58,9 @@ go get github.com/hawk-tui/hawk-tui/pkg/hawktui
 package main
 
 import (
+    "fmt"
+    "os"
+
     tea "github.com/charmbracelet/bubbletea"
     "github.com/hawk-tui/hawk-tui/pkg/hawktui"
     "github.com/hawk-tui/hawk-tui/pkg/hawktui/components"
@@ -98,9 +101,38 @@ func main() {
 
     m := model{app: app, button: button}
     p := tea.NewProgram(m, tea.WithAltScreen())
-    p.Run()
+    if _, err := p.Run(); err != nil {
+        fmt.Printf("Error: %v\n", err)
+        os.Exit(1)
+    }
 }
 \`\`\`
+
+## Demos
+
+See HawkTUI in action with our animated demos created using [VHS](https://github.com/charmbracelet/vhs):
+
+### Simple Demo
+![Simple Demo](demos/simple_demo.gif)
+
+Basic components including button, input field, and spinner with focus management.
+
+### Dashboard Demo
+![Dashboard Demo](demos/dashboard_demo.gif)
+
+Dashboard template with metrics, status indicators, and charts.
+
+### Form Demo
+![Form Demo](demos/form_demo.gif)
+
+Form validation, field navigation, and submit handling.
+
+### List Demo
+![List Demo](demos/list_demo.gif)
+
+List component with navigation, filtering, and item selection.
+
+**Want to generate these demos yourself?** See [demos/README.md](demos/README.md) for instructions on using VHS to create these recordings.
 
 ## Examples
 
@@ -166,16 +198,18 @@ table.SetOnSelect(func(row int) {
 ### Dashboard Template
 
 \`\`\`go
-dashboard := hawktui.NewDashboard()
+app := hawktui.New(hawktui.WithTheme(hawktui.ThemeDracula()))
+
+dashboard := templates.NewDashboardWithTheme(app.Theme())
 dashboard.SetTitle("System Dashboard")
 dashboard.SetColumns(3)
 
 dashboard.AddWidget(templates.CreateMetricWidget(
-    "CPU Usage", "45%", "8 cores", theme,
+    "CPU Usage", "45%", "8 cores", app.Theme(),
 ))
 
 dashboard.AddWidget(templates.CreateStatusWidget(
-    "Server", "healthy", "All systems operational", theme,
+    "Server", "healthy", "All systems operational", app.Theme(),
 ))
 \`\`\`
 
@@ -265,6 +299,7 @@ Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for det
 
 - **Documentation**: [pkg/hawktui/README.md](pkg/hawktui/README.md)
 - **Examples**: [examples/hawktui/](examples/hawktui/)
+- **Demos**: [demos/README.md](demos/README.md)
 - **Issues**: https://github.com/RyanSStephens/hawk-tui/issues
 
 ---
