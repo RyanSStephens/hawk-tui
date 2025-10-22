@@ -1,40 +1,38 @@
 # VHS tape file for HawkTUI Form Demo
 # This demonstrates form validation and input handling
 
-Output demos/form_demo.gif
+Output form_demo.gif
 
-Require go
-
-Set FontSize 20
-Set Width 1400
-Set Height 900
+Set FontSize 18
+Set Width 1200
+Set Height 800
 Set Theme "Nord"
-Set TypingSpeed 100ms
-Set PlaybackSpeed 1.0
+Set TypingSpeed 50ms
+Set PlaybackSpeed 0.5
 
 Type "go run examples/hawktui/form_demo.go"
 Enter
-Sleep 2s
+Sleep 3s
 
 # Fill in the form fields
 Type "John Doe"
-Sleep 500ms
+Sleep 600ms
 Tab
-Sleep 300ms
+Sleep 400ms
 
-Type "john.doe@example.com"
-Sleep 500ms
+Type "john@example.com"
+Sleep 600ms
 Tab
-Sleep 300ms
+Sleep 400ms
 
-Type "mypassword123"
-Sleep 500ms
+Type "password123"
+Sleep 600ms
 Tab
-Sleep 300ms
+Sleep 400ms
 
 # Navigate to submit button and press it
 Tab
-Sleep 300ms
+Sleep 400ms
 Space
 Sleep 1.5s
 
