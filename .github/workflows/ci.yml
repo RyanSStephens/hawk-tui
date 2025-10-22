@@ -52,12 +52,11 @@ jobs:
     - name: Build examples (Windows)
       if: runner.os == 'Windows'
       run: |
-        mkdir -p bin
+        New-Item -ItemType Directory -Force -Path bin | Out-Null
         go build -o bin/simple_demo.exe examples/hawktui/simple_demo.go
         go build -o bin/dashboard_demo.exe examples/hawktui/dashboard_demo.go
         go build -o bin/form_demo.exe examples/hawktui/form_demo.go
         go build -o bin/list_demo.exe examples/hawktui/list_demo.go
-      shell: bash
 
     - name: Upload coverage reports
       if: matrix.os == 'ubuntu-latest'
