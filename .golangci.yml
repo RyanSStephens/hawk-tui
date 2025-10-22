@@ -2,11 +2,6 @@ version: 2
 
 run:
   timeout: 5m
-  skip-dirs:
-    - examples
-    - bin
-    - build
-    - dist
 
 issues:
   max-issues-per-linter: 0
