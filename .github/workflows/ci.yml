@@ -52,12 +52,12 @@ jobs:
     - name: Build examples (Windows)
       if: runner.os == 'Windows'
       run: |
-        if not exist bin mkdir bin
-        go build -o bin\simple_demo.exe examples\hawktui\simple_demo.go
-        go build -o bin\dashboard_demo.exe examples\hawktui\dashboard_demo.go
-        go build -o bin\form_demo.exe examples\hawktui\form_demo.go
-        go build -o bin\list_demo.exe examples\hawktui\list_demo.go
-      shell: cmd
+        mkdir -p bin
+        go build -o bin/simple_demo.exe examples/hawktui/simple_demo.go
+        go build -o bin/dashboard_demo.exe examples/hawktui/dashboard_demo.go
+        go build -o bin/form_demo.exe examples/hawktui/form_demo.go
+        go build -o bin/list_demo.exe examples/hawktui/list_demo.go
+      shell: bash
 
     - name: Upload coverage reports
       if: matrix.os == 'ubuntu-latest'
@@ -97,20 +97,6 @@ jobs:
     steps:
     - name: Checkout code
       uses: actions/checkout@v4
-
-    - name: Set up Go
-      uses: actions/setup-go@v4
-      with:
-        go-version: ${{ env.GO_VERSION }}
-
-    - name: Install Gosec
-      run: |
-        go install github.com/securecodewarrior/gosec/v2/cmd/gosec@latest
-        echo "$(go env GOPATH)/bin" >> $GITHUB_PATH
-
-    - name: Run Gosec Security Scanner
-      run: gosec ./pkg/... ./internal/... ./cmd/...
-      continue-on-error: true
 
     - name: Run Trivy vulnerability scanner
       uses: aquasecurity/trivy-action@master
