@@ -92,6 +92,15 @@ func (b *Button) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				return b, nil
 			}
 		}
+	case tea.MouseMsg:
+		// Handle mouse events
+		if b.HandleMouse(msg) {
+			// If mouse was handled (clicked within bounds)
+			if !b.disabled && msg.Button == tea.MouseButtonLeft && msg.Action == tea.MouseActionRelease {
+				b.Press()
+				return b, nil
+			}
+		}
 	}
 	return b, nil
 }

@@ -156,6 +156,22 @@ func (l *List) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				l.onSelect(*item)
 			}
 		}
+	case tea.MouseMsg:
+		// Handle mouse events
+		if l.HandleMouse(msg) {
+			// Calculate which item was clicked
+			localY := msg.Y - l.y
+			if localY >= 0 && msg.Button == tea.MouseButtonLeft && msg.Action == tea.MouseActionRelease {
+				// Item index accounting for offset
+				clickedItem := localY + l.offset
+				if clickedItem >= 0 && clickedItem < len(l.filtered) {
+					l.cursor = clickedItem
+					if item := l.SelectedItem(); item != nil && l.onSelect != nil {
+						l.onSelect(*item)
+					}
+				}
+			}
+		}
 	}
 
 	return l, nil

@@ -156,6 +156,22 @@ func (t *Table) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 				t.onSelect(t.cursor)
 			}
 		}
+	case tea.MouseMsg:
+		// Handle mouse events
+		if t.HandleMouse(msg) {
+			// Calculate which row was clicked (account for header row)
+			localY := msg.Y - t.y
+			if localY > 0 && msg.Button == tea.MouseButtonLeft && msg.Action == tea.MouseActionRelease {
+				// Row index accounting for offset and header
+				clickedRow := localY - 1 + t.offset
+				if clickedRow >= 0 && clickedRow < len(t.rows) {
+					t.cursor = clickedRow
+					if t.onSelect != nil {
+						t.onSelect(t.cursor)
+					}
+				}
+			}
+		}
 	}
 
 	return t, nil

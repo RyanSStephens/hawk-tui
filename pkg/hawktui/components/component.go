@@ -26,6 +26,12 @@ type BaseComponent struct {
 	height  int
 	focused bool
 	visible bool
+	// Position tracking for mouse events
+	x        int
+	y        int
+	onClick  func(x, y int)
+	onHover  func(x, y int)
+	hovering bool
 }
 
 // NewBaseComponent creates a new base component
@@ -91,4 +97,63 @@ func (b *BaseComponent) Style() lipgloss.Style {
 		return b.theme.Focused
 	}
 	return b.theme.Blurred
+}
+
+// SetPosition sets the component's position on screen
+func (b *BaseComponent) SetPosition(x, y int) {
+	b.x = x
+	b.y = y
+}
+
+// Position returns the component's position
+func (b *BaseComponent) Position() (int, int) {
+	return b.x, b.y
+}
+
+// SetOnClick sets the click handler
+func (b *BaseComponent) SetOnClick(handler func(x, y int)) {
+	b.onClick = handler
+}
+
+// SetOnHover sets the hover handler
+func (b *BaseComponent) SetOnHover(handler func(x, y int)) {
+	b.onHover = handler
+}
+
+// IsHovering returns whether the mouse is hovering over the component
+func (b *BaseComponent) IsHovering() bool {
+	return b.hovering
+}
+
+// InBounds checks if the given coordinates are within the component bounds
+func (b *BaseComponent) InBounds(x, y int) bool {
+	return x >= b.x && x < b.x+b.width &&
+		y >= b.y && y < b.y+b.height
+}
+
+// HandleMouse processes mouse events and returns true if handled
+func (b *BaseComponent) HandleMouse(msg tea.MouseMsg) bool {
+	if !b.visible {
+		return false
+	}
+
+	inBounds := b.InBounds(msg.X, msg.Y)
+
+	// Handle hover state
+	if inBounds != b.hovering {
+		b.hovering = inBounds
+		if inBounds && b.onHover != nil {
+			b.onHover(msg.X-b.x, msg.Y-b.y)
+		}
+	}
+
+	// Handle clicks
+	if inBounds && msg.Button == tea.MouseButtonLeft && msg.Action == tea.MouseActionRelease {
+		if b.onClick != nil {
+			b.onClick(msg.X-b.x, msg.Y-b.y)
+			return true
+		}
+	}
+
+	return inBounds
 }

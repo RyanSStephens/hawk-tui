@@ -93,6 +93,22 @@ func (t *Tabs) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case "shift+tab", "left", "h":
 			t.SetActiveTab((t.activeTab - 1 + len(t.tabs)) % len(t.tabs))
 		}
+	case tea.MouseMsg:
+		// Handle mouse events
+		if t.HandleMouse(msg) {
+			// Calculate which tab was clicked based on X coordinate
+			localX := msg.X - t.x
+			if msg.Button == tea.MouseButtonLeft && msg.Action == tea.MouseActionRelease {
+				// Calculate tab widths and positions
+				tabWidth := t.width / len(t.tabs)
+				if tabWidth > 0 {
+					clickedTab := localX / tabWidth
+					if clickedTab >= 0 && clickedTab < len(t.tabs) {
+						t.SetActiveTab(clickedTab)
+					}
+				}
+			}
+		}
 	}
 
 	return t, nil

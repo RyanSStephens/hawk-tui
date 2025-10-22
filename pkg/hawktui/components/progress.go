@@ -102,6 +102,11 @@ func (p *ProgressBar) Init() tea.Cmd {
 
 // Update implements tea.Model
 func (p *ProgressBar) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
+	switch msg := msg.(type) {
+	case tea.MouseMsg:
+		// Handle mouse events for click detection
+		p.HandleMouse(msg)
+	}
 	return p, nil
 }
 

@@ -105,12 +105,15 @@ func (s *Spinner) Init() tea.Cmd {
 
 // Update implements tea.Model
 func (s *Spinner) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	switch msg.(type) {
+	switch msg := msg.(type) {
 	case spinnerTickMsg:
 		if s.running {
 			s.frame = (s.frame + 1) % len(s.frames)
 			return s, s.tick()
 		}
+	case tea.MouseMsg:
+		// Handle mouse events for click detection
+		s.HandleMouse(msg)
 	}
 	return s, nil
 }

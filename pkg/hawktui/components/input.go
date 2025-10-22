@@ -102,12 +102,15 @@ func (i *Input) Init() tea.Cmd {
 
 // Update implements tea.Model
 func (i *Input) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
-	if !i.focused {
-		return i, nil
-	}
-
 	switch msg := msg.(type) {
+	case tea.MouseMsg:
+		// Handle mouse events - clicking focuses the input
+		i.HandleMouse(msg)
+		// Note: Focus management typically handled by parent
 	case tea.KeyMsg:
+		if !i.focused {
+			return i, nil
+		}
 		switch msg.Type {
 		case tea.KeyBackspace:
 			if i.cursorPos > 0 {
