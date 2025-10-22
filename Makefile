@@ -106,7 +106,7 @@ test: test-go test-nodejs test-python
 ## test-go: Run Go tests
 test-go:
 	$(call print_info,"Running Go tests")
-	go test -v -race -coverprofile=coverage.out ./...
+	go test -v -race -coverprofile=coverage.out ./pkg/... ./internal/... ./cmd/...
 	go tool cover -html=coverage.out -o coverage.html
 	$(call print_success,"Go tests completed")
 
